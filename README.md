@@ -1,9 +1,10 @@
 # La Culla della Luna
 
-Sito di Alessia Iraci: gioielli con pietre naturali e fili di rame placcati oro e argento.
-Un solo file, `index.html`, più le foto in `images/`. Nessuna build: aprilo nel browser o pubblicalo su Netlify / GitHub Pages.
+Sito di Alessia Iraci, costruito sui dati del negozio https://laculladellaluna.myshopify.com/
+(44 pezzi: prezzi, pietre, disponibilità e foto). "Acquista" porta alla pagina del prodotto su Shopify.
 
-## Da completare
-- **Instagram / contatti**: sezione `#contatti` in `index.html`, link `https://www.instagram.com/` da sostituire.
-- **Nomi e pietre**: le didascalie ("Sole", "Goccia", "pietra azzurra") sono provvisorie, da far confermare ad Alessia.
-- **Altre foto**: aggiungile in `images/` e duplica un `<figure>` nella sezione `#pezzi`.
+`index.html` (dati dei prodotti inclusi nello script, `const PRODUCTS`) + foto in `images/`. Nessuna build.
+
+## Aggiornare i prodotti
+I dati sono una copia del negozio del 7 novembre 2026: prezzi e disponibilità non si aggiornano da soli.
+Per aggiornarli si rigenera `PRODUCTS` da `https://laculladellaluna.myshopify.com/products.json`.

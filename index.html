@@ -3,23 +3,24 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#090807">
+<meta name="theme-color" content="#120f0c">
 <title>La Culla della Luna</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="La Culla della Luna: gioielli con pietre naturali e fili intrecciati a mano da Alessia Iraci, Sicilia.">
+<meta name="description" content="La Culla della Luna: gioielli wire wrapping con pietre naturali, fatti a mano in Sicilia da Alessia Iraci.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;1,6..96,400&family=Hanken+Grotesk:wght@300;400&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;1,6..96,400&family=Hanken+Grotesk:wght@300;400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
 <style>
-/* Layout: le foto a tutta larghezza come in un libro fotografico; il testo è una didascalia allineata a sinistra. Il velluto nero delle scatole è lo sfondo della pagina. */
+/* Layout: una vetrina scura e calda come le foto del negozio (legno, pietra, salvia). In ogni scheda la foto è ingrandita sulla pietra e il nome della pietra è il titolo. */
 :root {
-  --velvet: #090807;       /* velluto nero della scatola */
-  --bone: #efe7da;         /* carta e cartone */
-  --bone-2: #cdc4b5;
-  --mist: #9a9083;
+  --earth: #120f0c;        /* fondo: terra scura */
+  --earth-2: #1c1713;
+  --bone: #f1e9dc;
+  --bone-2: #cfc5b4;
+  --mist: #9d9282;
   --line: #ffffff1a;
-  --moon: #a9ccff;         /* riflesso azzurro della pietra di luna */
-  --wire: #dccaa4;
+  --gold: #e2b46b;         /* oro 14k */
+  --sage: #a9b79b;         /* salvia */
   --display: "Bodoni Moda", "Didot", "Bodoni 72", Georgia, serif;
   --body: "Hanken Grotesk", "Helvetica Neue", Arial, sans-serif;
   --mono: "DM Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
@@ -27,134 +28,174 @@
 }
 * { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }
-body { margin: 0; background: var(--velvet); color: var(--bone); font: 300 17px/1.65 var(--body); overflow-x: hidden; }
+body { margin: 0; background: var(--earth); color: var(--bone); font: 300 17px/1.6 var(--body); overflow-x: hidden; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--earth); }
 a { color: inherit; }
 img { display: block; max-width: 100%; height: auto; }
-:focus-visible { outline: 1px solid var(--moon); outline-offset: 4px; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 1px solid var(--gold); outline-offset: 3px; }
 
 .wrap {
-  max-width: 980px; margin: 0 auto;
-  padding-left: max(18px, env(safe-area-inset-left, 0px));
-  padding-right: max(18px, env(safe-area-inset-right, 0px));
+  max-width: 1120px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
 }
-.label { font: 400 11px/1.5 var(--mono); letter-spacing: .18em; text-transform: uppercase; color: var(--mist); }
+.label { font: 400 11px/1.5 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--mist); }
 
-/* ---------- HERO: la foto, la pietra al centro ---------- */
+/* ---------- HERO ---------- */
 .hero { position: relative; }
 .topline {
   position: absolute; z-index: 3; top: 0; left: 0; right: 0;
-  display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 12px;
-  padding-top: 16px;
-  color: var(--bone);
+  display: flex; justify-content: space-between; align-items: center; gap: 12px; padding-top: 14px;
 }
-.topline .label { color: #efe7dacc; text-shadow: 0 1px 8px #0009; }
+.topline .label { color: #f1e9dccc; text-shadow: 0 1px 8px #0009; }
+.topline a { text-decoration: none; }
 .moon-now { display: flex; align-items: center; gap: 8px; }
 .moon-now canvas { width: 16px; height: 16px; flex: none; }
-
-.shot {
-  position: relative; margin: 0 auto; width: 100%; max-width: 720px;
-  aspect-ratio: 4 / 5; overflow: hidden;
-  touch-action: pan-y; -webkit-tap-highlight-color: transparent;
-}
+.shot { position: relative; margin: 0 auto; width: 100%; max-width: 720px; aspect-ratio: 4 / 5; overflow: hidden; touch-action: pan-y; }
 .shot .zoom { position: absolute; inset: 0; transform-origin: 50% 50%; animation: breathe 22s ease-in-out infinite alternate; }
 .shot img { width: 100%; height: 100% !important; object-fit: cover; }
-/* il riflesso azzurro sulla pietra, al centro esatto della foto */
 .glint {
-  position: absolute; left: 50%; top: 50%; width: 26%; aspect-ratio: .9;
+  position: absolute; left: 50%; top: 50%; width: 26%; aspect-ratio: .9; border-radius: 50%;
   translate: calc(-50% + var(--gx, 0) * 7%) calc(-50% + var(--gy, 0) * 7%);
-  border-radius: 50%;
   background: radial-gradient(closest-side, #cfe2ffcc, #8fb6ff55 45%, transparent 75%);
-  mix-blend-mode: screen; pointer-events: none;
-  animation: shimmer 4.5s ease-in-out infinite;
-  transition: translate .4s ease-out;
+  mix-blend-mode: screen; pointer-events: none; animation: shimmer 4.5s ease-in-out infinite; transition: translate .4s ease-out;
 }
 .shot::after {
   content: ""; position: absolute; inset: 0; pointer-events: none;
-  background:
-    linear-gradient(180deg, #090807b0 0%, transparent 16%, transparent 58%, var(--velvet) 99%),
-    radial-gradient(closest-side, transparent 62%, #09080766 100%);
+  background: linear-gradient(180deg, #120f0cb0 0%, transparent 16%, transparent 56%, var(--earth) 99%), radial-gradient(closest-side, transparent 62%, #120f0c66 100%);
 }
-
-.title {
-  position: relative; z-index: 2; margin: -30% 0 0;
-  font: 400 clamp(3.6rem, 18vw, 8.4rem)/.86 var(--display); letter-spacing: -.02em;
-}
+.title { position: relative; z-index: 2; margin: -30% 0 0; font: 400 clamp(3.6rem, 18vw, 8.4rem)/.86 var(--display); letter-spacing: -.02em; }
 .title span { display: block; }
 .title em { display: block; font-style: italic; padding-left: 16%; }
-.title em b { font-weight: 400; color: var(--moon); }
-.lede { margin: 28px 0 0; max-width: 34ch; font-size: 1.12rem; }
-.lede small { display: block; margin-top: 10px; font-size: .85rem; color: var(--mist); }
+.title em b { font-weight: 400; color: var(--gold); }
+.lede { margin: 26px 0 0; max-width: 32ch; font-size: 1.12rem; }
+.hero-cta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; padding: 0 22px;
+  border-radius: 99px; text-decoration: none; cursor: pointer; border: 1px solid var(--line); background: none;
+  font: 400 12px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase;
+}
+.btn-gold { color: var(--earth); border: 0; background: linear-gradient(135deg, #f6e2b5, var(--gold) 55%, #b5843f); }
 
-/* ---------- SEZIONI ---------- */
-section.block { padding-block: 96px 8px; }
-.head { display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
+/* ---------- COLLEZIONE ---------- */
+.shop { padding-block: 72px 24px; }
+.head { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
 .head h2 { margin: 0; font: italic 400 clamp(2.6rem, 11vw, 4.6rem)/1 var(--display); text-wrap: balance; }
 
-blockquote.voice { margin: 0; font: italic 400 clamp(1.5rem, 6.2vw, 2.5rem)/1.3 var(--display); text-wrap: pretty; }
-blockquote.voice::before { content: "«"; color: var(--moon); }
-blockquote.voice::after { content: "»"; color: var(--moon); }
-.by { margin: 18px 0 0; }
-.prose { display: grid; gap: 18px; margin-top: 44px; max-width: 60ch; color: var(--bone-2); }
+.filters {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  background: color-mix(in srgb, var(--earth) 92%, transparent);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+  margin: 0 0 18px; padding: 10px 0 0;
+}
+.row { display: flex; gap: 8px; align-items: center; }
+.kinds { display: flex; flex: 1; min-width: 0; max-width: 480px; border: 1px solid var(--line); border-radius: 99px; padding: 3px; }
+.kinds button {
+  flex: 1; border: 0; background: none; border-radius: 99px; padding: 9px 4px; cursor: pointer;
+  font: 400 11px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--mist);
+}
+.kinds button[aria-pressed="true"] { background: var(--bone); color: var(--earth); }
+.avail {
+  flex: none; display: flex; align-items: center; gap: 6px; border: 1px solid var(--line); border-radius: 99px;
+  padding: 9px 12px; background: none; cursor: pointer; font: 400 11px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--mist);
+}
+.avail i { width: 8px; height: 8px; border-radius: 50%; border: 1px solid var(--mist); }
+.avail[aria-pressed="true"] { color: var(--bone); border-color: var(--sage); }
+.avail[aria-pressed="true"] i { background: var(--sage); border-color: var(--sage); }
+.stones {
+  display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none;
+  margin: 10px calc(-1 * max(16px, env(safe-area-inset-left, 0px))) 0;
+  padding: 0 max(16px, env(safe-area-inset-left, 0px)) 10px;
+}
+.stones::-webkit-scrollbar { display: none; }
+.stones button {
+  flex: none; display: flex; align-items: center; gap: 7px; padding: 7px 12px 7px 8px; cursor: pointer;
+  border: 1px solid var(--line); border-radius: 99px; background: none; font: 400 13px/1 var(--body); color: var(--bone-2);
+}
+.stones button i { width: 14px; height: 14px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fff9 0 12%, var(--c) 45%, color-mix(in srgb, var(--c) 60%, #000) 100%); }
+.stones button small { font: 400 10px var(--mono); color: var(--mist); }
+.stones button[aria-pressed="true"] { border-color: var(--bone); color: var(--bone); background: var(--earth-2); }
+.count { margin: 0 0 14px; }
+
+.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 12px; }
+.card { display: grid; gap: 10px; text-align: left; background: none; border: 0; padding: 0; cursor: pointer; min-width: 0; -webkit-tap-highlight-color: transparent; }
+.card .ph { position: relative; aspect-ratio: 1; overflow: hidden; border-radius: 3px; background: var(--earth-2); }
+.card img { width: 100%; height: 100% !important; object-fit: cover; transform: scale(var(--z, 1.55)); transition: transform .6s ease; }
+.card:hover img, .card:focus-visible img { transform: scale(1.02); }
+.card.sold img { filter: saturate(.55) brightness(.8); }
+.tag {
+  position: absolute; left: 8px; top: 8px; padding: 5px 8px; border-radius: 99px;
+  font: 400 9.5px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; background: #120f0ccc; color: var(--bone-2);
+}
+.card b { display: block; font: italic 400 1.3rem/1.1 var(--display); overflow-wrap: anywhere; }
+.card .meta { display: grid; gap: 3px; margin-top: 4px; }
+.card .meta .label { font-size: 10px; letter-spacing: .12em; line-height: 1.4; }
+.card .price { font: 400 13px var(--mono); color: var(--bone); white-space: nowrap; }
+.empty { padding: 40px 0; color: var(--mist); }
+
+/* scheda prodotto */
+dialog.sheet {
+  width: 100%; max-width: 640px; max-height: 92dvh; margin: auto auto 0; padding: 0; border: 0;
+  border-radius: 18px 18px 0 0; background: var(--earth-2); color: var(--bone); overflow: auto;
+}
+dialog.sheet::backdrop { background: #000a; backdrop-filter: blur(3px); }
+.sheet .pics { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
+.sheet .pics::-webkit-scrollbar { display: none; }
+.sheet .pics img { flex: 0 0 100%; width: 100%; aspect-ratio: 1; object-fit: cover; scroll-snap-align: start; }
+.sheet .body { padding: 28px max(18px, env(safe-area-inset-left, 0px)) calc(24px + env(safe-area-inset-bottom, 0px)); display: grid; gap: 14px; }
+.sheet h3 { margin: 0; font: italic 400 2.3rem/1.05 var(--display); }
+.sheet .price { font: 400 1.1rem var(--mono); }
+.sheet ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 0; }
+.sheet li { padding: 9px 0; border-bottom: 1px solid var(--line); color: var(--bone-2); font-size: .95rem; }
+.sheet .actions { display: grid; gap: 10px; margin-top: 6px; }
+.sheet .close { position: sticky; top: 10px; float: right; margin: 10px 10px -54px 0; z-index: 2; width: 44px; height: 44px; border-radius: 50%; border: 0; background: #120f0ccc; cursor: pointer; font-size: 20px; }
+.dots { display: flex; gap: 6px; justify-content: center; margin-top: -26px; position: relative; }
+.dots i { width: 6px; height: 6px; border-radius: 50%; background: #fff6; }
+
+/* ---------- CHI SONO ---------- */
+.about { padding-block: 96px 24px; }
+.about blockquote { margin: 0; font: italic 400 clamp(1.5rem, 6.2vw, 2.5rem)/1.3 var(--display); text-wrap: pretty; }
+.about blockquote::before { content: "«"; color: var(--gold); }
+.about blockquote::after { content: "»"; color: var(--gold); }
+.about .by { margin: 18px 0 0; }
+.prose { display: grid; gap: 18px; margin-top: 40px; max-width: 60ch; color: var(--bone-2); }
 .prose p { margin: 0; }
 .prose .drop::first-letter { float: left; font: 400 4.2rem/.8 var(--display); padding: 6px 10px 0 0; color: var(--bone); }
 
-/* da vicino: macro da scorrere */
-.rail {
-  display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory;
-  padding: 0 max(18px, env(safe-area-inset-left, 0px)) 8px;
-  scrollbar-width: none;
-}
-.rail::-webkit-scrollbar { display: none; }
-.rail figure { flex: 0 0 82%; max-width: 420px; margin: 0; scroll-snap-align: center; }
-.rail img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 3px; }
-figcaption { margin-top: 12px; display: grid; gap: 2px; }
-figcaption b { font: italic 400 1.45rem/1.15 var(--display); }
-.swipe { margin-top: 14px; }
+/* ---------- COME SONO FATTI ---------- */
+.made { padding-block: 96px 24px; }
+.facts { list-style: none; margin: 0; padding: 0; display: grid; }
+.facts li { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--line); }
+.facts b { font: italic 400 1.35rem/1.2 var(--display); }
+.facts span { color: var(--bone-2); }
+.boxshot { margin: 36px 0 0; }
+.boxshot img { width: 100%; border-radius: 3px; }
+.boxshot figcaption { margin-top: 10px; }
 
-/* pezzi */
-.pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.pair img { width: 100%; aspect-ratio: 39 / 49; object-fit: cover; border-radius: 3px; }
-.wide { margin: 40px 0 0; }
-.wide img { width: 100%; border-radius: 3px; }
-
-/* indossato */
-.worn { display: grid; gap: 22px; }
-.worn img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 3px; }
-.worn p { margin: 0; max-width: 40ch; color: var(--bone-2); }
-
-/* tempo lento */
-.gestures { list-style: none; margin: 0; padding: 0; display: grid; }
-.gestures li { display: grid; grid-template-columns: 40px 1fr; align-items: baseline; padding: 16px 0; border-bottom: 1px solid var(--line); }
-.gestures .n { font: 400 11px var(--mono); color: var(--mist); letter-spacing: .1em; }
-.gestures .v { font: 400 clamp(2rem, 9.5vw, 3.6rem)/1.05 var(--display); min-width: 0; }
-.gestures li:nth-child(even) .v { font-style: italic; padding-left: 12%; }
-.gestures li:last-child .v { color: var(--moon); }
-.slow { margin: 30px 0 0; max-width: 46ch; color: var(--bone-2); }
-
+/* ---------- CONTATTI ---------- */
 .contact { padding-block: 110px 48px; }
 .contact h2 { margin: 0 0 18px; font: 400 clamp(2.4rem, 10vw, 4.2rem)/1 var(--display); text-wrap: balance; }
-.contact h2 em { color: var(--moon); }
+.contact h2 em { color: var(--gold); }
 .contact p { max-width: 44ch; color: var(--bone-2); margin: 0; }
-.cta {
-  display: inline-flex; margin-top: 30px; padding: 16px 26px; border-radius: 99px; text-decoration: none;
-  font: 400 12px/1 var(--mono); letter-spacing: .18em; text-transform: uppercase;
-  color: var(--velvet); background: linear-gradient(135deg, #f4ead2, var(--wire) 55%, #a8936a);
-}
+.mail { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 26px; }
+.mail code { font: 400 15px var(--mono); color: var(--bone); user-select: all; overflow-wrap: anywhere; }
+.contact .hero-cta { margin-top: 22px; }
 footer { padding-block: 32px 48px; border-top: 1px solid var(--line); }
-footer p { margin: 0; font: 300 13px/1.6 var(--body); color: var(--mist); max-width: 60ch; }
+footer p { margin: 0; font: 300 13px/1.6 var(--body); color: var(--mist); max-width: 64ch; }
 
 @keyframes breathe { from { transform: scale(1); } to { transform: scale(1.08); } }
 @keyframes shimmer { 0%, 100% { opacity: .35; } 50% { opacity: .9; } }
-
-@media (min-width: 760px) {
+@media (min-width: 700px) {
+  .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px 18px; }
   .title { margin-top: -18%; }
-  .worn { grid-template-columns: 1.2fr 1fr; align-items: end; }
-  .rail { justify-content: center; }
-  .rail figure { flex-basis: 300px; }
+  dialog.sheet { margin: auto; border-radius: 18px; }
 }
+@media (min-width: 1000px) { .grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 @media (prefers-reduced-motion: reduce) {
   .shot .zoom, .glint { animation: none; }
-  .glint { opacity: .6; transition: none; }
+  .card img { transition: none; }
 }
 </style>
 </head>
@@ -162,105 +203,197 @@ footer p { margin: 0; font: 300 13px/1.6 var(--body); color: var(--mist); max-wi
 
 <header class="hero">
   <div class="topline wrap">
-    <span class="label">Messina · 38°11′N 15°33′E</span>
-    <span class="label moon-now"><span id="moonText">Luna di stanotte</span><canvas id="moonIcon" width="32" height="32" aria-hidden="true"></canvas></span>
+    <span class="label moon-now"><canvas id="moonIcon" width="32" height="32" aria-hidden="true"></canvas><span id="moonText">Luna di stanotte</span></span>
+    <a class="label" href="#collezione">Collezione ↓</a>
   </div>
   <div class="shot" id="shot">
     <div class="zoom">
-      <img src="images/sole-hero.jpg" width="720" height="900" alt="Ciondolo con pietra di luna dai riflessi azzurri, circondata da raggi di filo intrecciato, adagiato nella sua scatola di velluto nero.">
+      <img src="images/sole-hero.jpg" width="720" height="900" alt="Ciondolo con pietra di luna dai riflessi azzurri, circondata da raggi di filo intrecciato, nella sua scatola di velluto nero.">
       <div class="glint" aria-hidden="true"></div>
     </div>
   </div>
   <div class="wrap">
     <h1 class="title"><span>La culla</span><em>della <b>Luna</b></em></h1>
-    <p class="lede">Pietre naturali e fili di rame placcati in oro e argento, intrecciati a mano da Alessia Iraci.<small>Ogni pezzo è unico.</small></p>
+    <p class="lede">Gioielli in wire wrapping con pietre naturali, fatti a mano in Sicilia da Alessia Iraci.</p>
+    <div class="hero-cta">
+      <a class="btn btn-gold" href="#collezione">Scegli la tua pietra</a>
+    </div>
   </div>
 </header>
 
 <main>
-  <section class="block" id="porto">
+  <section class="shop" id="collezione">
     <div class="wrap">
-      <div class="head"><span class="label">Il rifugio</span><h2>Porto</h2></div>
-      <blockquote class="voice">La culla della Luna nasce con l’idea di essere rifugio per anime inquiete. Posto nel quale concedersi di essere fragili. Porto e mare aperto. Culla che protegge, permettendo al nostro sguardo di volare sempre più in alto.</blockquote>
+      <div class="head"><span class="label">Pezzi unici</span><h2>La collezione</h2></div>
+      <div class="filters">
+        <div class="row">
+          <div class="kinds" role="group" aria-label="Tipo di gioiello" id="kinds">
+            <button type="button" data-kind="" aria-pressed="true">Tutto</button>
+            <button type="button" data-kind="Collane" aria-pressed="false">Collane</button>
+            <button type="button" data-kind="Bracciali" aria-pressed="false">Bracciali</button>
+            <button type="button" data-kind="Anelli" aria-pressed="false">Anelli</button>
+          </div>
+          <button type="button" class="avail" id="avail" aria-pressed="false"><i></i>Disponibili</button>
+        </div>
+        <div class="stones" role="group" aria-label="Pietra" id="stones"></div>
+      </div>
+      <p class="label count" id="count" aria-live="polite"></p>
+      <div class="grid" id="grid"></div>
+    </div>
+  </section>
+
+  <section class="about" id="chi-sono">
+    <div class="wrap">
+      <div class="head"><span class="label">Chi sono</span><h2>Porto e mare aperto</h2></div>
+      <blockquote>La culla della luna nasce con l’idea di essere rifugio per anime inquiete. Posto nel quale concedersi di essere fragili. Porto e mare aperto. Culla che protegge, permettendo al nostro sguardo di volare sempre più in alto.</blockquote>
       <p class="label by">Alessia Iraci</p>
       <div class="prose">
-        <p class="drop">Alessia è nata a Messina nel 1989. Dopo un percorso di studi umanistici si avvicina alla fotografia, poi si reinventa e prende una strada nuova: fili di rame placcati in oro e argento, pietre colorate e intrecci, alla ricerca di una propria forma.</p>
-        <p>La Luna non è soltanto un riferimento estetico. È una presenza che invita a guardarsi dentro, ad accettare anche le parti meno luminose di sé, e a riconoscere che proprio nelle fragilità può nascondersi una possibilità di crescita.</p>
+        <p class="drop">Io sono Alessia, fotografa e creatrice di gioielli siciliana. Tramite l’arte riesco ad esprimere le mie emozioni, il mio sentire, il mio modo di vedere.</p>
+        <p>Questa antica tecnica del wire wrapping mi permette di dar vita ad intrecci astratti che sembrano trovare una loro forma.</p>
+        <p>Luna che sussurra, consigliando di immergerci nelle nostre ombre, perché solo in quell’abisso riusciremo a scorgere la vera luce.</p>
       </div>
     </div>
   </section>
 
-  <section class="block" id="vicino">
-    <div class="wrap"><div class="head"><span class="label">Il ciondolo Sole</span><h2>Da vicino</h2></div></div>
-    <div class="rail">
-      <figure><img src="images/sole-pietra.jpg" width="300" height="375" loading="lazy" alt="Dettaglio della pietra di luna con il riflesso azzurro."><figcaption><b>La pietra</b><span class="label">Pietra di luna, riflesso azzurro</span></figcaption></figure>
-      <figure><img src="images/sole-raggi.jpg" width="240" height="300" loading="lazy" alt="Dettaglio dei raggi in filo intorno alla pietra."><figcaption><b>I raggi</b><span class="label">Filo piegato e intrecciato</span></figcaption></figure>
-      <figure><img src="images/sole-spirale.jpg" width="240" height="300" loading="lazy" alt="Dettaglio della spirale di filo che regge la catenina."><figcaption><b>La spirale</b><span class="label">L’attacco della catenina</span></figcaption></figure>
-    </div>
-    <div class="wrap"><p class="label swipe">Scorri →</p></div>
-  </section>
-
-  <section class="block" id="pezzi">
+  <section class="made" id="come-sono-fatti">
     <div class="wrap">
-      <div class="head"><span class="label">Mare aperto</span><h2>Pezzi unici</h2></div>
-      <div class="pair">
-        <figure style="margin:0"><img src="images/sole-argento.jpg" width="390" height="490" loading="lazy" alt="Ciondolo Sole con pietra di luna e filo argentato su velluto nero."><figcaption><b>Sole</b><span class="label">Pietra di luna · filo argentato</span></figcaption></figure>
-        <figure style="margin:0"><img src="images/goccia.jpg" width="390" height="490" loading="lazy" alt="Ciondolo a goccia con pietra azzurra avvolta in filo tessuto."><figcaption><b>Goccia</b><span class="label">Pietra azzurra · filo tessuto</span></figcaption></figure>
-      </div>
-      <figure class="wide"><img src="images/scatola.jpg" width="1200" height="903" loading="lazy" alt="I due ciondoli nelle loro scatole di cartone e velluto nero."><figcaption><span class="label">Pronti a partire, ognuno nella sua scatola</span></figcaption></figure>
-    </div>
-  </section>
-
-  <section class="block" id="indossato">
-    <div class="wrap worn">
-      <img src="images/indossato.jpg" width="640" height="800" loading="lazy" alt="Un ciondolo con filo dorato e pietra scura indossato su un maglione a righe.">
-      <div>
-        <div class="head"><span class="label">Indossato</span><h2>Alla luce del giorno</h2></div>
-        <p>Filo dorato e pietra scura, da portare addosso ogni giorno.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="block" id="tempo">
-    <div class="wrap">
-      <div class="head"><span class="label">Il mestiere</span><h2>Un tempo lento</h2></div>
-      <ol class="gestures">
-        <li><span class="n">I</span><span class="v">accostare materiali e colori</span></li>
-        <li><span class="n">II</span><span class="v">lavorare</span></li>
-        <li><span class="n">III</span><span class="v">correggere</span></li>
-        <li><span class="n">IV</span><span class="v">intrecciare</span></li>
-      </ol>
-      <p class="slow">Un tempo lento, che appartiene a chi ha deciso di restituire valore agli oggetti attraverso l’artigianalità.</p>
+      <div class="head"><span class="label">Materiali</span><h2>Come sono fatti</h2></div>
+      <ul class="facts">
+        <li><b>Il filo</b><span>Rame placcato oro 14k oppure argento, intrecciato a mano.</span></li>
+        <li><b>La pietra</b><span>Sempre naturale: labradorite, adularia, larimar, lapislazzuli, acquamarina e altre.</span></li>
+        <li><b>La catenina</b><span>Acciaio inossidabile, con 5 cm di anellini per regolarla.</span></li>
+        <li><b>La pelle</b><span>Tutto senza nichel.</span></li>
+        <li><b>Gli anelli</b><span>Fatti su misura.</span></li>
+        <li><b>La spedizione</b><span>Entro 3 giorni lavorativi dall’ordine.</span></li>
+      </ul>
+      <figure class="boxshot">
+        <img src="images/scatola.jpg" width="1200" height="903" loading="lazy" alt="Due ciondoli nelle loro scatole di cartone con interno in velluto nero.">
+        <figcaption class="label">Ogni pezzo parte nella sua scatola</figcaption>
+      </figure>
     </div>
   </section>
 
   <section class="contact" id="contatti">
     <div class="wrap">
-      <h2>Trova la tua <em>pietra</em>.</h2>
-      <p>Ogni gioiello nasce una volta sola. Scrivi ad Alessia per le creazioni disponibili e per sapere dove trovarla al prossimo mercatino.</p>
-      <a class="cta" href="https://www.instagram.com/" target="_blank" rel="noopener">Instagram →</a>
+      <h2>Scrivi ad <em>Alessia</em>.</h2>
+      <p>Per un pezzo già venduto, una pietra che ti piace o un anello su misura.</p>
+      <div class="mail"><code id="email">alessiairaci952@gmail.com</code><button type="button" class="btn" id="copy">Copia</button></div>
+      <div class="hero-cta">
+        <a class="btn btn-gold" href="https://laculladellaluna.myshopify.com/" target="_blank" rel="noopener">Vai al negozio</a>
+        <a class="btn" href="mailto:alessiairaci952@gmail.com">Scrivi una mail</a>
+      </div>
     </div>
   </section>
 </main>
 
 <footer>
   <div class="wrap">
-    <p>La Culla della Luna · gioielli di Alessia Iraci, Sicilia. Citazioni dall’articolo di Natola Santi su <a href="https://livinginthecity.it/la-culla-della-luna-gioielli-alessia-iraci/" target="_blank" rel="noopener">Living in the City</a>, 6 novembre 2026.</p>
+    <p>La Culla della Luna · gioielli di Alessia Iraci, Sicilia. Acquisti e pagamenti sul <a href="https://laculladellaluna.myshopify.com/" target="_blank" rel="noopener">negozio Shopify</a>.</p>
   </div>
 </footer>
 
+<dialog class="sheet" id="sheet" aria-labelledby="sheetTitle">
+  <button type="button" class="close" id="close" aria-label="Chiudi">×</button>
+  <div class="pics" id="pics"></div>
+  <div class="dots" id="dots"></div>
+  <div class="body">
+    <span class="label" id="sheetKind"></span>
+    <h3 id="sheetTitle"></h3>
+    <span class="price" id="sheetPrice"></span>
+    <ul id="sheetList"></ul>
+    <div class="actions" id="sheetActions"></div>
+  </div>
+</dialog>
+
 <script>
+const PRODUCTS = [{"h":"collana-sole-piccolo-3","name":"Sole piccolo","kind":"Collane","stone":"Labradorite verde","fam":"Labradorite","metal":"Oro 14k","price":57.0,"avail":false,"desc":"Catenina in acciaio inossidabile. Ciondolo realizzato con fili di rame placcati oro 14k. Pietra naturale: Labradorite verde. Tutto senza nichel. Lunghezza catenina: 40cm più 5cm di anellini regolabili.","imgs":["images/shop/collana-sole-piccolo-3-0.jpg","images/shop/collana-sole-piccolo-3-1.jpg"]},{"h":"collana-sole-piccolo-2","name":"Sole piccolo","kind":"Collane","stone":"Labradorite verde","fam":"Labradorite","metal":"Oro 14k","price":57.0,"avail":false,"desc":"Catenina in acciaio inossidabile. Ciondolo realizzato con fili di rame placcati oro 14k. Pietra naturale: Labradorite verde. Tutto senza nichel. Lunghezza catenina: 40cm più 5cm di anellini regolabili.","imgs":["images/shop/collana-sole-piccolo-2-0.jpg","images/shop/collana-sole-piccolo-2-1.jpg"]},{"h":"collana-conchiglia-8","name":"Conchiglia con medaglietta del sole","kind":"Collane","stone":"Labradorite dorata","fam":"Labradorite","metal":"Oro 14k","price":72.0,"avail":true,"desc":"Catenina in acciaio inossidabile. Ciondolo realizzato con fili di rame placcati oro 14k. Pietra naturale: Labradorite dorata. Medaglietta del sole in acciaio inossidabile, con cristallino. Tutto senza nichel. Lunghezza catenina: 40cm più 5cm di anellini regolabili.","imgs":["images/shop/collana-conchiglia-8-0.jpg","images/shop/collana-conchiglia-8-1.jpg"]},{"h":"collana-conchiglia-media-5","name":"Conchiglia media","kind":"Collane","stone":"Pietra del sole","fam":"Pietra del sole","metal":"Oro 14k","price":65.0,"avail":true,"desc":"Catenina in acciaio inossidabile. Ciondolo realizzato con fili di rame placcato oro 14k. Pietra naturale: pietra del sole. Tutto senza nichel. Lunghezza catenina: 41cm più 5cm di anellini regolabili.","imgs":["images/shop/collana-conchiglia-media-5-0.jpg","images/shop/collana-conchiglia-media-5-1.jpg"]},{"h":"collana-conchiglia-7","name":"Conchiglia","kind":"Collane","stone":"Acquamarina","fam":"Acquamarina","metal":"Oro 14k","price":60.0,"avail":true,"desc":"Catenina in acciaio inossidabile. Ciondolo realizzato con fili di rame placcati oro 14k. Pietra naturale: Acquamarina. Tutto senza nichel. Lunghezza catenina: 41cm più 5cm di anellini regolabili.","imgs":["images/shop/collana-conchiglia-7-0.jpg","images/shop/collana-conchiglia-7-1.jpg"]},{"h":"collana-clessidra-1","name":"Clessidra","kind":"Collane","stone":"Quarzo Citrino","fam":"Quarzo","metal":"Oro 14k","price":58.0,"avail":true,"desc":"Catenina in acciaio inossidabile. Ciondolo realizzato con fili di rame placcato oro 14k. Pietra naturale: quarzo Citrino. Tutto senza nichel. Lunghezza catenina: 41cm più 5cm di anellini regolabili.","imgs":["images/shop/collana-clessidra-1-0.jpg","images/shop/collana-clessidra-1-1.jpg"]},{"h":"collana-sole-medio-2","name":"Sole medio","kind":"Collane","stone":"Quarzo Rutilato","fam":"Quarzo","metal":"Oro 14k","price":65.0,"avail":true,"desc":"Catenina in acciaio inossidabile. Ciondolo realizzato con fili di rame placcato oro 14k. Pietra naturale: quarzo Rutilato. Tutto senza nichel. Lunghezza catenina: 41cm più 5cm di anellini regolabili.","imgs":["images/shop/collana-sole-medio-2-0.jpg","images/shop/collana-sole-medio-2-1.jpg"]},{"h":"bracciale-antica-grecia-1","name":"Antica Grecia","kind":"Bracciali","stone":"Quarzo Citrino sfaccettato","fam":"Quarzo","metal":"Oro 14k","price":40.0,"avail":true,"desc":"Bracciale semi rigido. Base in ottone e decorazioni in rame placcato oro 14k. Pietra naturale: Quarzo Citrino sfaccettato.","imgs":["images/shop/bracciale-antica-grecia-1-0.jpg"]},{"h":"bracciale-spuma-di-mare-1","name":"Spuma di mare","kind":"Bracciali","stone":"Acquamarina sfaccettata","fam":"Acquamarina","metal":"Oro 14k","price":45.0,"avail":false,"desc":"Bracciale semi rigido. Base in ottone e decorazioni in rame placcato oro 14k. Pietra naturale: Acquamarina sfaccettata.","imgs":["images/shop/bracciale-spuma-di-mare-1-0.jpg","images/shop/bracciale-spuma-di-mare-1-1.jpg"]},{"h":"collana-luna-1","name":"Luna","kind":"Collane","stone":"Labradorite bianca","fam":"Labradorite","metal":"Argento","price":72.0,"avail":false,"desc":"Catenina in acciaio inossidabile. Ciondolo realizzato con fili di rame placcati argento. Pietre naturali: Labradoriti bianche. Tutto senza nichel. Lunghezza catenina: 41cm con 5cm di anellini regolabili.","imgs":["images/shop/collana-luna-1-0.jpg","images/shop/collana-luna-1-1.jpg"]},{"h":"collana-luna","name":"Luna","kind":"Collane","stone":"Labradorite bianca","fam":"Labradorite","metal":"Argento","price":62.0,"avail":false,"desc":"Catenina in acciaio inossidabile. Ciondolo realizzato con fili di rame placcato argento. Pietra naturale: Labradorite bianca. Tutto senza nichel. Lunghezza catenina: 41cm più 5cm di anellini regolabili.","imgs":["images/shop/collana-luna-0.jpg","images/shop/collana-luna-1.jpg"]},{"h":"collana-clessidra","name":"Clessidra","kind":"Collane","stone":"Adularia avorio","fam":"Adularia","metal":"Oro 14k","price":60.0,"avail":false,"desc":"Catenina in acciaio inossidabile. Ciondolo realizzato con fili di rame placcato oro 14k. Pietra naturale: Adularia avorio. Tutto senza nichel. Lunghezza catenina: 41cm più 5cm di anellini regolabili.","imgs":["images/shop/collana-clessidra-0.jpg","images/shop/collana-clessidra-1.jpg"]},{"h":"collana-sole","name":"Sole","kind":"Collane","stone":"Adularia","fam":"Adularia","metal":"Oro 14k","price":60.0,"avail":false,"desc":"Catenina in acciaio inossidabile. Ciondolo realizzato con fili di rame placcato oro 14k. Pietra naturale: Adularia. Tutto senza nichel. Lunghezza catenina: 41cm più 5cm di anellini regolabili.","imgs":["images/shop/collana-sole-0.jpg","images/shop/collana-sole-1.jpg"]},{"h":"collana-conchiglia-6","name":"Conchiglia","kind":"Collane","stone":"Larimar","fam":"Larimar","metal":"Argento","price":56.0,"avail":true,"desc":"Catenina in acciaio inossidabile. Ciondolo realizzato con fili di rame placcato argento. Pietra naturale: Larimar. Tutto senza nichel. Lunghezza catenina: 41cm più 5 cm di anellini regolabili.","imgs":["images/shop/collana-conchiglia-6-0.jpg","images/shop/collana-conchiglia-6-1.jpg"]},{"h":"collana-conchiglia-5","name":"Conchiglia","kind":"Collane","stone":"Larimar","fam":"Larimar","metal":"Oro 14k","price":56.0,"avail":false,"desc":"Catenina in acciaio inossidabile. Ciondolo realizzato con fili di rame placcati oro 14k. Pietra naturale: Larimar. Tutto senza nichel. Lunghezza catenina: 41cm più 5 cm di anellini regolabili.","imgs":["images/shop/collana-conchiglia-5-0.jpg","images/shop/collana-conchiglia-5-1.jpg"]},{"h":"collana-conchiglia-media-4","name":"Conchiglia media","kind":"Collane","stone":"Labradorite","fam":"Labradorite","metal":"Oro 14k","price":66.0,"avail":false,"desc":"Catenina in acciaio inossidabile. Ciondolo realizzato con fili di rame placcato oro 14k. Pietra naturale: Labradorite. Tutto senza nichel. Lunghezza catenina: 41cm più 5cm di anellini regolabili.","imgs":["images/shop/collana-conchiglia-media-4-0.jpg","images/shop/collana-conchiglia-media-4-1.jpg"]},{"h":"collana-conchiglia-4","name":"Conchiglia","kind":"Collane","stone":"Adularia","fam":"Adularia","metal":"Argento","price":56.0,"avail":false,"desc":"Catenina in acciaio inossidabile. Ciondolo realizzato con fili di rame placcato argento. Pietra naturale: Adularia. Tutto senza nichel. Lunghezza catena: 41cm più 5 cm di anellini regolabili.","imgs":["images/shop/collana-conchiglia-4-0.jpg","images/shop/collana-conchiglia-4-1.jpg"]},{"h":"bracciale-spuma-di-mare","name":"Spuma di mare","kind":"Bracciali","stone":"Labradorite bianca","fam":"Labradorite","metal":"Oro 14k","price":40.0,"avail":true,"desc":"Bracciale semi rigido. Base in ottone con decorazioni in rame placcato oro 14k. Pietra naturale: Labradorite bianca.","imgs":["images/shop/bracciale-spuma-di-mare-0.jpg","images/shop/bracciale-spuma-di-mare-1.jpg"]},{"h":"anello-semplice-1","name":"Semplice","kind":"Anelli","stone":"Pietra del sole","fam":"Pietra del sole","metal":"Oro 14k","price":43.0,"avail":true,"desc":"Anello su misura. Realizzato con fili di rame placcato oro 14k. Pietra naturale: Pietra del sole. Misura:15mm.","imgs":["images/shop/anello-semplice-1-0.jpg","images/shop/anello-semplice-1-1.jpg"]},{"h":"anello-ondulato-1","name":"Ondulato","kind":"Anelli","stone":"Adularia avorio","fam":"Adularia","metal":"Argento","price":40.0,"avail":true,"desc":"Anello su misura. Realizzato con fili di rame placcato argento. Pietra naturale: Adularia avorio. Misura:15mm.","imgs":["images/shop/anello-ondulato-1-0.jpg","images/shop/anello-ondulato-1-1.jpg"]},{"h":"anello-ondulato","name":"Ondulato","kind":"Anelli","stone":"Labradorite verde","fam":"Labradorite","metal":"Oro 14k","price":43.0,"avail":true,"desc":"Anello su misura. Realizzato con fili di rame placcato oro 14k. Pietra naturale: Labradorite verde. Misura: 15mm.","imgs":["images/shop/anello-ondulato-0.jpg","images/shop/anello-ondulato-1.jpg"]},{"h":"anello-semplice","name":"Semplice","kind":"Anelli","stone":"Adularia beige","fam":"Adularia","metal":"Oro 14k","price":43.0,"avail":true,"desc":"Anello semplice su misura. Realizzato con fili di rame placcato oro 14k. Pietra naturale: Adularia beige. Misura:13,5 mm.","imgs":["images/shop/anello-semplice-0.jpg","images/shop/anello-semplice-1.jpg"]},{"h":"bracciale-antica-grecia","name":"Antica Grecia","kind":"Bracciali","stone":"Labradorite","fam":"Labradorite","metal":"Oro 14k","price":40.0,"avail":false,"desc":"Bracciale semi rigido. Base in ottone con decorazioni in rame placcato oro 14k. Pietra naturale: Labradorite.","imgs":["images/shop/bracciale-antica-grecia-0.jpg","images/shop/bracciale-antica-grecia-1.jpg"]},{"h":"collana-conchiglia-3","name":"Conchiglia","kind":"Collane","stone":"Ossidiana dorata","fam":"Ossidiana","metal":"Oro 14k","price":60.0,"avail":true,"desc":"Catenina in acciaio inossidabile. Ciondolo realizzato con fili di rame placcati oro 14k. Tutto senza nichel. Pietra naturale: Ossidiana dorata. Lunghezza catenina: 42cm con 5 cm di anellini regolabili.","imgs":["images/shop/collana-conchiglia-3-0.jpg","images/shop/collana-conchiglia-3-1.jpg"]},{"h":"bracciale-semi-rigido","name":"Spuma di Mare","kind":"Bracciali","stone":"Adularia bianca","fam":"Adularia","metal":"Argento","price":40.0,"avail":true,"desc":"Bracciale semi rigido realizzato con fili di rame placcati argento. Regolabile. Pietra naturale: Adularia bianca. Tutto senza nichel.","imgs":["images/shop/bracciale-semi-rigido-0.jpg"]},{"h":"collana-lunetta-2","name":"Lunetta","kind":"Collane","stone":"Labradorite","fam":"Labradorite","metal":"Argento","price":30.0,"avail":true,"desc":"Catenina in acciaio inossidabile. Ciondolo in pietra avvolto da un filo di rame placcato argento. Pietra naturale: Labradorite. Lunghezza catenina: 45cm. Tutto senza nichel.","imgs":["images/shop/collana-lunetta-2-0.jpg","images/shop/collana-lunetta-2-1.jpg"]},{"h":"collana-lunetta-1","name":"Lunetta","kind":"Collane","stone":"Labradorite","fam":"Labradorite","metal":"Argento","price":30.0,"avail":false,"desc":"Catenina in acciaio inossidabile. Ciondolo in pietra avvolto da un filo di rame placcato argento. Pietra naturale: Labradorite. Lunghezza catenina: 45cm. Tutto senza nichel.","imgs":["images/shop/collana-lunetta-1-0.jpg","images/shop/collana-lunetta-1-1.jpg"]},{"h":"collana-lunetta","name":"Lunetta","kind":"Collane","stone":"Labradorite","fam":"Labradorite","metal":"Argento","price":30.0,"avail":false,"desc":"Catenina in acciaio inossidabile. Pendente in pietra avvolto da un filo di rame placcato argento. Pietra naturale: Labradorite. Lunghezza catenina: 45cm. Tutto senza nichel.","imgs":["images/shop/collana-lunetta-0.jpg","images/shop/collana-lunetta-1.jpg"]},{"h":"collana-occhio-greco","name":"Occhio greco","kind":"Collane","stone":"Ametista","fam":"Ametista","metal":"Oro 14k","price":60.0,"avail":true,"desc":"Catenina acciaio inossidabile. Ciondolo realizzato con fili di rame placcato oro 14k. Pietra naturale: Ametista. Lunghezza catenina: 42cm più 5 cm di anellini regolabili. Tutto senza nichel.","imgs":["images/shop/collana-occhio-greco-0.jpg","images/shop/collana-occhio-greco-1.jpg"]},{"h":"collana-sole-piccolo-1","name":"Sole piccolo","kind":"Collane","stone":"Ametista","fam":"Ametista","metal":"Oro 14k","price":55.0,"avail":true,"desc":"Catenina in acciaio inossidabile. Ciondolo realizzato con fili di rame placcato oro 14k. Pietra naturale: Ametista. Lunghezza catenina: 42cm più 5 cm di anellini regolabili. Tutto senza nichel.","imgs":["images/shop/collana-sole-piccolo-1-0.jpg","images/shop/collana-sole-piccolo-1-1.jpg"]},{"h":"collana-conchiglietta","name":"Conchiglietta","kind":"Collane","stone":"Cianite verde","fam":"Cianite","metal":"Argento","price":55.0,"avail":true,"desc":"Catenina in acciaio inossidabile. Ciondolo realizzato con fili di rame placcati argento. Pietra naturale: Cianite verde. Lunghezza catenina girocollo: 32cm più 5 cm di anellini regolabili. Tutto senza nichel.","imgs":["images/shop/collana-conchiglietta-0.jpg","images/shop/collana-conchiglietta-1.jpg"]},{"h":"collana-conchiglia-media-3","name":"Conchiglia media","kind":"Collane","stone":"Labradorite azzurro/gialla","fam":"Labradorite","metal":"Oro 14k","price":60.0,"avail":false,"desc":"Catenina in acciaio inossidabile. Ciondolo realizzato a mano con fili di rame placcato oro 14k. Pietra naturale: Labradorite azzurro/gialla. Lunghezza catenina: 42cm più 5cm di anellini regolabili. Tutto senza nichel.","imgs":["images/shop/collana-conchiglia-media-3-0.jpg","images/shop/collana-conchiglia-media-3-1.jpg"]},{"h":"collana-sole-medio-piccolo","name":"Sole medio/piccolo","kind":"Collane","stone":"Turchese tibetano","fam":"Turchese","metal":"Oro 14k","price":55.0,"avail":false,"desc":"Catenina in acciaio inossidabile. Ciondolo realizzato con fili di rame placcati oro 14k. Pietra naturale: Turchese tibetano. Lunghezza catenina: 42cm più 5cm di anellini regolabili. Tutto senza nichel.","imgs":["images/shop/collana-sole-medio-piccolo-0.jpg","images/shop/collana-sole-medio-piccolo-1.jpg"]},{"h":"collana-sole-piccolo","name":"Sole piccolo","kind":"Collane","stone":"Lapislazzuli","fam":"Lapislazzuli","metal":"Oro 14k","price":55.0,"avail":true,"desc":"Catenina in acciaio inossidabile. Ciondolo realizzato con fili di rame placcati oro 14k. Pietra naturale: Lapislazzuli. Lunghezza catenina: 42cm più 5cm di anellini regolabili. Tutto senza nichel.","imgs":["images/shop/collana-sole-piccolo-0.jpg","images/shop/collana-sole-piccolo-1.jpg"]},{"h":"collana-sole-medio-1","name":"Sole medio","kind":"Collane","stone":"Crisocolla","fam":"Crisocolla","metal":"Argento","price":65.0,"avail":true,"desc":"Catenina in acciaio inossidabile. Ciondolo realizzato con fili di rame placcati argento. Pietra naturale: Crisocolla. Lunghezza catenina: 42cm più 5cm di anellini regolabili. Tutto senza nichel.","imgs":["images/shop/collana-sole-medio-1-0.jpg","images/shop/collana-sole-medio-1-1.jpg"]},{"h":"collana-conchiglia-2","name":"Conchiglia","kind":"Collane","stone":"Labradorite blu","fam":"Labradorite","metal":"Argento","price":50.0,"avail":false,"desc":"Catenina in acciaio inossidabile. Ciondolo realizzato a mano con fili di rame placcati argento. Pietra naturale: Labradorite blu. Lunghezza catenina: 42cm più 5cm di anellini regolabili. Tutto senza nichel.","imgs":["images/shop/collana-conchiglia-2-0.jpg","images/shop/collana-conchiglia-2-1.jpg"]},{"h":"collana-sole-medio","name":"Sole medio","kind":"Collane","stone":"Angelite","fam":"Angelite","metal":"Oro 14k","price":65.0,"avail":false,"desc":"Catenina in acciaio inossidabile. Ciondolo realizzato a mano con fili di rame placcati oro 14k. Pietra naturale: Angelite. Lunghezza catenina: 42 cm con 5 cm di anellini regolabili. Tutto senza nichel.","imgs":["images/shop/collana-sole-medio-0.jpg","images/shop/collana-sole-medio-1.jpg"]},{"h":"collana-conchiglia-1","name":"Conchiglia","kind":"Collane","stone":"Corniola","fam":"Corniola","metal":"Oro 14k","price":55.0,"avail":true,"desc":"Catenina in acciaio inossidabile. Ciondolo realizzato a mano con fili di rame placcati oro 14k. Pietra naturale: Corniola. Lunghezza catenina: 42cm più 5 cm di anellini regolabili. Tutto senza nichel.","imgs":["images/shop/collana-conchiglia-1-0.jpg","images/shop/collana-conchiglia-1-1.jpg"]},{"h":"collana-conchiglia","name":"Conchiglia","kind":"Collane","stone":"Turchese iraniano","fam":"Turchese","metal":"Argento","price":65.0,"avail":true,"desc":"Catenina in acciaio inossidabile. Ciondolo realizzato a mano con fili di rame placcati argento. Pietra naturale: Turchese iraniano. Lunghezza catenina: 42cm più 5 cm di anellini regolabili. Tutto senza nichel.","imgs":["images/shop/collana-conchiglia-0.jpg","images/shop/collana-conchiglia-1.jpg"]},{"h":"collana-conchiglia-media-2","name":"Conchiglia media","kind":"Collane","stone":"Labradorite verde acqua","fam":"Labradorite","metal":"Oro 14k","price":66.0,"avail":false,"desc":"Catenina in acciaio inossidabile. Ciondolo realizzato a mano con fili di rame placcati oro 14k. Pietra naturale: Labradorite verde acqua. Lunghezza catenina: 42cm più 5cm di anellini regolabili. Tutto senza nichel.","imgs":["images/shop/collana-conchiglia-media-2-0.jpg","images/shop/collana-conchiglia-media-2-1.jpg"]},{"h":"collana-conchiglia-media-1","name":"Conchiglia media","kind":"Collane","stone":"Labradorite verde acqua","fam":"Labradorite","metal":"Oro 14k","price":60.0,"avail":false,"desc":"Catenina in acciaio inossidabile. Ciondolo realizzato a mano con fili di rame placcato oro 14k. Pietra: Labradorite verde acqua. Lunghezza catenina:42cm più 5 cm di anellini regolabili. Tutto senza nichel.","imgs":["images/shop/collana-conchiglia-media-1-0.jpg","images/shop/collana-conchiglia-media-1-1.jpg"]},{"h":"collana-conchiglia-media","name":"Conchiglia media","kind":"Collane","stone":"Labradorite verde acqua","fam":"Labradorite","metal":"Oro 14k","price":60.0,"avail":false,"desc":"Catenina acciaio inossidabile. Ciondolo realizzato a mano con fili di rame placcati oro 14k. Pietra: Labradorite verde acqua. Lunghezza catenina: 42cm più 5 cm di anellini regolabili. Tutto senza nichel.","imgs":["images/shop/collana-conchiglia-media-0.jpg","images/shop/collana-conchiglia-media-1.jpg"]},{"h":"collana-conchiglia-grande","name":"Conchiglia grande","kind":"Collane","stone":"Labradorite verde acqua","fam":"Labradorite","metal":"Oro 14k","price":80.0,"avail":false,"desc":"Catenina acciaio inossidabile. Ciondolo realizzato a mano con fili di rame placcati oro 14k. Pietra: Labradorite verde acqua. Lunghezza catenina 45 cm con 5 cm di anellini regolabili. Dimensione ciondolo: 5cm.","imgs":["images/shop/collana-conchiglia-grande-0.jpg","images/shop/collana-conchiglia-grande-1.jpg"]},{"h":"collana-luna-dorata","name":"Luna dorata","kind":"Collane","stone":"Lapislazzuli","fam":"Lapislazzuli","metal":"Oro 14k","price":56.0,"avail":true,"desc":"Catenina in acciaio inossidabile. Luna realizzata con fili di rame placcati oro 14k. Pietra: Lapislazzuli Lunghezza catenina: 42cm con 5 cm di anellini regolabili.","imgs":["images/shop/collana-luna-dorata-0.jpg","images/shop/collana-luna-dorata-1.jpg"]}];
 (() => {
-  // il riflesso segue il dito sulla foto (o l'inclinazione del telefono, dove concessa)
-  const shot = document.getElementById("shot");
-  const set = (x, y) => {
-    shot.style.setProperty("--gx", Math.max(-1, Math.min(1, x)).toFixed(3));
-    shot.style.setProperty("--gy", Math.max(-1, Math.min(1, y)).toFixed(3));
+  const SHOP = "https://laculladellaluna.myshopify.com/products/";
+  const COLORS = {
+    "Labradorite": "#6f93a6", "Adularia": "#e8e2d6", "Quarzo": "#e2b34a", "Pietra del sole": "#e07a3a",
+    "Acquamarina": "#93d6e2", "Larimar": "#7cc6e8", "Ametista": "#8e5bc7", "Turchese": "#3fb7b0",
+    "Lapislazzuli": "#2c4fb0", "Ossidiana": "#5b4a33", "Cianite": "#4d8f6a", "Crisocolla": "#2fa39a",
+    "Angelite": "#a9bfe6", "Corniola": "#c9522a",
   };
+  const eur = n => "€ " + n.toFixed(2).replace(".", ",");
+  const singular = { Collane: "Collana", Bracciali: "Bracciale", Anelli: "Anello" };
+  const st = { kind: "", fam: "", avail: false };
+
+  // chip delle pietre, ordinate per numero di pezzi
+  const fams = {};
+  PRODUCTS.forEach(p => { if (p.fam) fams[p.fam] = (fams[p.fam] || 0) + 1; });
+  const stonesEl = document.getElementById("stones");
+  const chip = (fam, label, n) => {
+    const b = document.createElement("button");
+    b.type = "button"; b.dataset.fam = fam; b.setAttribute("aria-pressed", fam === st.fam);
+    b.style.setProperty("--c", COLORS[fam] || "#888");
+    b.innerHTML = (fam ? "<i></i>" : "") + label + (n ? ` <small>${n}</small>` : "");
+    b.addEventListener("click", () => { st.fam = st.fam === fam ? "" : fam; render(); });
+    stonesEl.appendChild(b);
+  };
+  chip("", "Tutte le pietre");
+  Object.entries(fams).sort((a, b) => b[1] - a[1]).forEach(([f, n]) => chip(f, f, n));
+  stonesEl.prepend(document.getElementById("avail"));
+
+  document.querySelectorAll("#kinds button").forEach(b => b.addEventListener("click", () => { st.kind = b.dataset.kind; render(); }));
+  const availBtn = document.getElementById("avail");
+  availBtn.addEventListener("click", () => { st.avail = !st.avail; render(); });
+
+  const grid = document.getElementById("grid");
+  function render() {
+    document.querySelectorAll("#kinds button").forEach(b => b.setAttribute("aria-pressed", b.dataset.kind === st.kind));
+    stonesEl.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", b.dataset.fam === st.fam));
+    availBtn.setAttribute("aria-pressed", st.avail);
+    const list = PRODUCTS
+      .filter(p => (!st.kind || p.kind === st.kind) && (!st.fam || p.fam === st.fam) && (!st.avail || p.avail))
+      .sort((a, b) => b.avail - a.avail);
+    const free = list.filter(p => p.avail).length;
+    document.getElementById("count").textContent = `${list.length} ${list.length === 1 ? "pezzo" : "pezzi"} · ${free} ${free === 1 ? "disponibile" : "disponibili"}`;
+    grid.innerHTML = "";
+    if (!list.length) { grid.innerHTML = `<p class="empty">Nessun pezzo con questi filtri. Prova un'altra pietra.</p>`; return; }
+    list.forEach(p => {
+      const b = document.createElement("button");
+      b.type = "button"; b.className = "card" + (p.avail ? "" : " sold");
+      b.style.setProperty("--z", p.kind === "Collane" ? 1.55 : 1.18);
+      b.innerHTML = `<span class="ph"><img src="${p.imgs[0]}" width="720" height="720" loading="lazy" alt="${singular[p.kind]} ${p.name} con ${p.stone}">${p.avail ? "" : '<span class="tag">Venduto</span>'}</span>
+        <span><b>${p.stone || p.name}</b><span class="meta"><span class="price">${eur(p.price)}</span><span class="label">${singular[p.kind]} ${p.name.toLowerCase()}</span></span></span>`;
+      b.addEventListener("click", () => open(p));
+      grid.appendChild(b);
+    });
+  }
+
+  // scheda prodotto
+  const sheet = document.getElementById("sheet");
+  function open(p) {
+    document.getElementById("pics").innerHTML = p.imgs.map(s => `<img src="${s}" width="720" height="720" alt="${singular[p.kind]} ${p.name} con ${p.stone}">`).join("");
+    document.getElementById("dots").innerHTML = p.imgs.length > 1 ? p.imgs.map(() => "<i></i>").join("") : "";
+    document.getElementById("sheetKind").textContent = `${singular[p.kind]} ${p.name.toLowerCase()}${p.metal ? " · " + p.metal : ""}`;
+    document.getElementById("sheetTitle").textContent = p.stone || p.name;
+    document.getElementById("sheetPrice").textContent = eur(p.price) + (p.avail ? "" : " · venduto");
+    document.getElementById("sheetList").innerHTML = p.desc.split(/\.\s+/).map(s => s.replace(/\.$/, "").trim()).filter(Boolean).map(s => `<li>${s}</li>`).join("");
+    document.getElementById("sheetActions").innerHTML = p.avail
+      ? `<a class="btn btn-gold" href="${SHOP + p.h}" target="_blank" rel="noopener">Acquista sul negozio</a>`
+      : `<a class="btn btn-gold" href="#contatti" data-close>Chiedi un pezzo simile</a><a class="btn" href="${SHOP + p.h}" target="_blank" rel="noopener">Vedi sul negozio</a>`;
+    sheet.querySelectorAll("[data-close]").forEach(a => a.addEventListener("click", () => sheet.close()));
+    if (sheet.showModal) sheet.showModal(); else sheet.setAttribute("open", "");
+    sheet.scrollTop = 0;
+  }
+  document.getElementById("close").addEventListener("click", () => sheet.close());
+  sheet.addEventListener("click", e => { if (e.target === sheet) sheet.close(); });
+
+  // copia email
+  document.getElementById("copy").addEventListener("click", e => {
+    const t = document.getElementById("email").textContent, btn = e.currentTarget;
+    const done = () => { btn.textContent = "Copiata"; setTimeout(() => (btn.textContent = "Copia"), 1800); };
+    const sel = () => { const r = document.createRange(); r.selectNodeContents(document.getElementById("email")); const s = getSelection(); s.removeAllRanges(); s.addRange(r); btn.textContent = "Selezionata"; };
+    try { navigator.clipboard.writeText(t).then(done, sel); } catch { sel(); }
+  });
+
+  // riflesso sulla pietra di luna
+  const shot = document.getElementById("shot");
+  const set = (x, y) => { shot.style.setProperty("--gx", Math.max(-1, Math.min(1, x)).toFixed(3)); shot.style.setProperty("--gy", Math.max(-1, Math.min(1, y)).toFixed(3)); };
   const aim = e => { const r = shot.getBoundingClientRect(); set(((e.clientX - r.left) / r.width) * 2 - 1, ((e.clientY - r.top) / r.height) * 2 - 1); };
-  shot.addEventListener("pointermove", aim);
-  shot.addEventListener("pointerdown", aim);
-  shot.addEventListener("pointerleave", () => set(0, 0));
+  shot.addEventListener("pointermove", aim); shot.addEventListener("pointerdown", aim); shot.addEventListener("pointerleave", () => set(0, 0));
   addEventListener("deviceorientation", e => { if (e.gamma != null) set(e.gamma / 30, (e.beta - 45) / 30); });
 
   // la luna di stanotte
@@ -273,10 +406,12 @@ footer p { margin: 0; font: 300 13px/1.6 var(--body); color: var(--mist); max-wi
   x.translate(16, 16);
   x.fillStyle = "rgba(255,255,255,.18)"; x.beginPath(); x.arc(0, 0, R, 0, 7); x.fill();
   const waxing = age < P / 2, k = Math.cos((2 * Math.PI * age) / P);
-  x.fillStyle = "#efe7da"; x.beginPath();
+  x.fillStyle = "#f1e9dc"; x.beginPath();
   x.arc(0, 0, R, -Math.PI / 2, Math.PI / 2, !waxing);
   x.ellipse(0, 0, Math.abs(k) * R, R, 0, Math.PI / 2, -Math.PI / 2, (k > 0) === waxing);
   x.fill();
+
+  render();
 })();
 </script>
 </body>
