@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#120f0c">
+<meta name="theme-color" content="#b9c4a9">
 <title>La Culla della Luna</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="La Culla della Luna: gioielli wire wrapping con pietre naturali, fatti a mano in Sicilia da Alessia Iraci.">
@@ -11,20 +11,21 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;1,6..96,400&family=Hanken+Grotesk:wght@300;400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
 <style>
-/* Layout: una vetrina scura e calda come le foto del negozio (legno, pietra, salvia). In ogni scheda la foto è ingrandita sulla pietra e il nome della pietra è il titolo. */
+/* Layout: una vetrina color salvia, come i mazzetti nelle foto del negozio. In ogni scheda la foto è ingrandita sulla pietra e il nome della pietra è il titolo. */
 :root {
-  --earth: #120f0c;        /* fondo: terra scura */
-  --earth-2: #1c1713;
-  --bone: #f1e9dc;
-  --bone-2: #cfc5b4;
-  --mist: #9d9282;
-  --line: #ffffff1a;
-  --gold: #e2b46b;         /* oro 14k */
-  --sage: #a9b79b;         /* salvia */
+  --earth: #b9c4a9;        /* fondo: verde salvia */
+  --earth-2: #aab796;
+  --bone: #1f2a1c;         /* testo: verde bosco quasi nero */
+  --bone-2: #34412f;
+  --mist: #56634d;
+  --line: #1f2a1c26;
+  --gold: #7a5a1e;         /* oro 14k, scurito per leggersi sulla salvia */
+  --sage: #3f5a38;         /* verde scuro per gli stati attivi */
+  --photo: #141a12;        /* ombra sulle foto */
   --display: "Bodoni Moda", "Didot", "Bodoni 72", Georgia, serif;
   --body: "Hanken Grotesk", "Helvetica Neue", Arial, sans-serif;
   --mono: "DM Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
-  color-scheme: dark;
+  color-scheme: light;
 }
 * { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }
@@ -63,7 +64,7 @@ button { font: inherit; color: inherit; }
 }
 .shot::after {
   content: ""; position: absolute; inset: 0; pointer-events: none;
-  background: linear-gradient(180deg, #120f0cb0 0%, transparent 16%, transparent 56%, var(--earth) 99%), radial-gradient(closest-side, transparent 62%, #120f0c66 100%);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--photo) 70%, transparent) 0%, transparent 16%, transparent 56%, var(--earth) 99%), radial-gradient(closest-side, transparent 62%, color-mix(in srgb, var(--photo) 40%, transparent) 100%);
 }
 .title { position: relative; z-index: 2; margin: -30% 0 0; font: 400 clamp(3.6rem, 18vw, 8.4rem)/.86 var(--display); letter-spacing: -.02em; }
 .title span { display: block; }
@@ -76,7 +77,7 @@ button { font: inherit; color: inherit; }
   border-radius: 99px; text-decoration: none; cursor: pointer; border: 1px solid var(--line); background: none;
   font: 400 12px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase;
 }
-.btn-gold { color: var(--earth); border: 0; background: linear-gradient(135deg, #f6e2b5, var(--gold) 55%, #b5843f); }
+.btn-gold { color: #eef1e6; border: 0; background: var(--sage); }
 
 /* ---------- COLLEZIONE ---------- */
 .shop { padding-block: 72px 24px; }
@@ -104,6 +105,7 @@ button { font: inherit; color: inherit; }
 .avail i { width: 8px; height: 8px; border-radius: 50%; border: 1px solid var(--mist); }
 .avail[aria-pressed="true"] { color: var(--bone); border-color: var(--sage); }
 .avail[aria-pressed="true"] i { background: var(--sage); border-color: var(--sage); }
+.avail[aria-pressed="true"] { background: #eef1e6; }
 .stones {
   display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none;
   margin: 10px calc(-1 * max(16px, env(safe-area-inset-left, 0px))) 0;
@@ -116,7 +118,8 @@ button { font: inherit; color: inherit; }
 }
 .stones button i { width: 14px; height: 14px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fff9 0 12%, var(--c) 45%, color-mix(in srgb, var(--c) 60%, #000) 100%); }
 .stones button small { font: 400 10px var(--mono); color: var(--mist); }
-.stones button[aria-pressed="true"] { border-color: var(--bone); color: var(--bone); background: var(--earth-2); }
+.stones button[aria-pressed="true"] { border-color: var(--bone); color: #eef1e6; background: var(--bone); }
+.stones button[aria-pressed="true"] small { color: #c9d2bb; }
 .count { margin: 0 0 14px; }
 
 .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 12px; }
@@ -124,10 +127,10 @@ button { font: inherit; color: inherit; }
 .card .ph { position: relative; aspect-ratio: 1; overflow: hidden; border-radius: 3px; background: var(--earth-2); }
 .card img { width: 100%; height: 100% !important; object-fit: cover; transform: scale(var(--z, 1.55)); transition: transform .6s ease; }
 .card:hover img, .card:focus-visible img { transform: scale(1.02); }
-.card.sold img { filter: saturate(.55) brightness(.8); }
+.card.sold img { filter: saturate(.5) brightness(.92); opacity: .8; }
 .tag {
   position: absolute; left: 8px; top: 8px; padding: 5px 8px; border-radius: 99px;
-  font: 400 9.5px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; background: #120f0ccc; color: var(--bone-2);
+  font: 400 9.5px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; background: #eef1e6e6; color: var(--bone);
 }
 .card b { display: block; font: italic 400 1.3rem/1.1 var(--display); overflow-wrap: anywhere; }
 .card .meta { display: grid; gap: 3px; margin-top: 4px; }
@@ -140,7 +143,7 @@ dialog.sheet {
   width: 100%; max-width: 640px; max-height: 92dvh; margin: auto auto 0; padding: 0; border: 0;
   border-radius: 18px 18px 0 0; background: var(--earth-2); color: var(--bone); overflow: auto;
 }
-dialog.sheet::backdrop { background: #000a; backdrop-filter: blur(3px); }
+dialog.sheet::backdrop { background: #141a1299; backdrop-filter: blur(3px); }
 .sheet .pics { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
 .sheet .pics::-webkit-scrollbar { display: none; }
 .sheet .pics img { flex: 0 0 100%; width: 100%; aspect-ratio: 1; object-fit: cover; scroll-snap-align: start; }
@@ -150,9 +153,9 @@ dialog.sheet::backdrop { background: #000a; backdrop-filter: blur(3px); }
 .sheet ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 0; }
 .sheet li { padding: 9px 0; border-bottom: 1px solid var(--line); color: var(--bone-2); font-size: .95rem; }
 .sheet .actions { display: grid; gap: 10px; margin-top: 6px; }
-.sheet .close { position: sticky; top: 10px; float: right; margin: 10px 10px -54px 0; z-index: 2; width: 44px; height: 44px; border-radius: 50%; border: 0; background: #120f0ccc; cursor: pointer; font-size: 20px; }
+.sheet .close { position: sticky; top: 10px; float: right; margin: 10px 10px -54px 0; z-index: 2; width: 44px; height: 44px; border-radius: 50%; border: 0; background: #eef1e6e6; color: var(--bone); cursor: pointer; font-size: 20px; }
 .dots { display: flex; gap: 6px; justify-content: center; margin-top: -26px; position: relative; }
-.dots i { width: 6px; height: 6px; border-radius: 50%; background: #fff6; }
+.dots i { width: 6px; height: 6px; border-radius: 50%; background: #ffffffaa; }
 
 /* ---------- CHI SONO ---------- */
 .about { padding-block: 96px 24px; }
