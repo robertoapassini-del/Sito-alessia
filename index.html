@@ -1,141 +1,583 @@
 <!doctype html>
 <html lang="it">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>La Culla della Luna · Gioielli di Alessia Iraci</title>
-  <meta name="description" content="La Culla della Luna: gioielli artigianali con pietre naturali, creati a mano da Alessia Iraci.">
-  <meta name="theme-color" content="#0b0d1a">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#06080e">
+<title>La Culla della Luna</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="La Culla della Luna: gioielli con pietre naturali e fili intrecciati a mano da Alessia Iraci, Sicilia.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400&family=Hanken+Grotesk:wght@300;400;500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+/* Layout: notturno a pagina intera. La pietra (canvas) è il centro; il testo le gira intorno, allineato a sinistra come una didascalia fotografica. */
+:root {
+  --ink: #06080e;          /* mare di notte */
+  --bone: #ebe5d6;         /* carta del libro nella foto */
+  --bone-2: #cfc9bb;
+  --mist: #8a92a5;
+  --line: #ffffff1c;
+  --flash: #2f9bff;        /* colore vivo della pietra attiva, aggiornato da JS */
+  --wire-a: #f2f3f6;
+  --wire-b: #9ea3ae;
+  --display: "Bodoni Moda", "Didot", "Bodoni 72", Georgia, serif;
+  --body: "Hanken Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --mono: "DM Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  color-scheme: dark;
+}
+:root[data-metal="oro"] { --wire-a: #f7e6b8; --wire-b: #b98d43; }
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--ink);
+  color: var(--bone);
+  font: 300 17px/1.65 var(--body);
+  overflow-x: hidden;
+}
+a { color: inherit; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 1px solid var(--flash); outline-offset: 4px; }
+
+.wrap {
+  max-width: 980px;
+  margin: 0 auto;
+  padding-left: max(18px, env(safe-area-inset-left, 0px));
+  padding-right: max(18px, env(safe-area-inset-right, 0px));
+}
+.label {
+  font: 400 11px/1.4 var(--mono);
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--mist);
+}
+
+/* ---------------- HERO ---------------- */
+.hero { position: relative; padding-top: 14px; overflow: hidden; }
+.hero::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(60% 38% at 50% 30%, color-mix(in srgb, var(--flash) 20%, transparent), transparent 70%),
+    linear-gradient(180deg, transparent 60%, color-mix(in srgb, var(--flash) 7%, transparent) 61%, transparent 88%);
+}
+.topline { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px 12px; position: relative; z-index: 2; }
+.moon-now { display: flex; align-items: center; gap: 8px; }
+.moon-now canvas { width: 18px; height: 18px; flex: none; }
+
+.stage {
+  position: relative; z-index: 1;
+  width: min(100%, 560px);
+  margin: 0 auto;
+  aspect-ratio: 1 / 1.08;
+  touch-action: pan-y;
+  cursor: grab;
+  -webkit-tap-highlight-color: transparent;
+}
+.stage canvas { width: 100%; height: 100%; display: block; }
+
+.title {
+  position: relative; z-index: 2;
+  margin: -16% 0 0;
+  font: 400 clamp(3.6rem, 18vw, 8.4rem)/.86 var(--display);
+  letter-spacing: -.02em;
+}
+.title span { display: block; }
+.title em { font-style: italic; display: block; padding-left: 16%; }
+.title em b { font-weight: 400; color: var(--flash); transition: color 1s; }
+
+.stone-bar {
+  display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 16px;
+  margin-top: 26px; padding-bottom: 30px; border-bottom: 1px solid var(--line);
+}
+.stone-now { min-width: 0; }
+.stone-now b { display: block; margin-top: 4px; font: italic 400 1.7rem/1.1 var(--display); }
+.metal { display: flex; border: 1px solid var(--line); border-radius: 99px; padding: 3px; }
+.metal button {
+  background: none; border: 0; border-radius: 99px; cursor: pointer;
+  padding: 9px 16px; font: 400 11px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--mist);
+}
+.metal button[aria-pressed="true"] { color: var(--ink); background: linear-gradient(135deg, var(--wire-a), var(--wire-b)); }
+
+.lede { margin: 30px 0 0; max-width: 34ch; font-size: 1.12rem; }
+.lede small { display: block; margin-top: 10px; font-size: .85rem; color: var(--mist); }
+
+/* ---------------- SEZIONI ---------------- */
+section.block { padding-block: 96px 24px; }
+.block-head { display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
+.block-head h2 { margin: 0; font: italic 400 clamp(2.6rem, 11vw, 4.6rem)/1 var(--display); text-wrap: balance; }
+
+blockquote.voice {
+  margin: 0; padding: 0;
+  font: italic 400 clamp(1.5rem, 6.2vw, 2.5rem)/1.3 var(--display);
+  text-wrap: pretty;
+}
+blockquote.voice::before { content: "«"; color: var(--flash); transition: color 1s; }
+blockquote.voice::after { content: "»"; color: var(--flash); transition: color 1s; }
+.voice-by { margin: 18px 0 0; }
+.prose { display: grid; gap: 18px; margin-top: 44px; max-width: 60ch; color: var(--bone-2); }
+.prose p { margin: 0; }
+.prose .drop::first-letter { float: left; font: 400 4.2rem/.8 var(--display); padding: 6px 10px 0 0; color: var(--bone); }
+
+.rail {
+  display: flex; gap: 22px; overflow-x: auto; scroll-snap-type: x mandatory;
+  margin-left: calc(-1 * max(18px, env(safe-area-inset-left, 0px)));
+  margin-right: calc(-1 * max(18px, env(safe-area-inset-right, 0px)));
+  padding: 18px max(18px, env(safe-area-inset-left, 0px)) 22px;
+  scrollbar-width: none;
+}
+.rail::-webkit-scrollbar { display: none; }
+.chip {
+  flex: 0 0 auto; scroll-snap-align: start;
+  display: grid; justify-items: center; gap: 12px;
+  background: none; border: 0; cursor: pointer; padding: 0;
+  font: 400 10.5px/1.2 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--mist);
+  -webkit-tap-highlight-color: transparent;
+}
+.chip i {
+  width: 64px; height: 80px; border-radius: 50%;
+  background: radial-gradient(circle at 36% 30%, #ffffffd0 0 5%, var(--l) 16%, var(--m) 52%, var(--d) 100%);
+  box-shadow: 0 0 0 4px var(--ink), 0 0 0 5px var(--line), 0 12px 32px -10px var(--g);
+  transition: transform .35s, box-shadow .35s;
+}
+.chip[aria-pressed="true"] { color: var(--bone); }
+.chip[aria-pressed="true"] i { transform: translateY(-4px) scale(1.08); box-shadow: 0 0 0 4px var(--ink), 0 0 0 5px var(--wire-a), 0 16px 40px -6px var(--g); }
+
+.stone-sheet {
+  display: grid; grid-template-columns: 124px 1fr; gap: 18px; align-items: center;
+  margin-top: 8px; padding-top: 24px; border-top: 1px solid var(--line);
+}
+.stone-sheet canvas { width: 124px; height: 134px; }
+.stone-sheet > div { min-width: 0; }
+.stone-sheet h3 { margin: 0 0 6px; font: italic 400 2rem/1.05 var(--display); }
+.stone-sheet p { margin: 0; color: var(--bone-2); }
+.stone-sheet .label { margin-top: 10px; display: block; }
+
+.gestures { list-style: none; margin: 0; padding: 0; display: grid; }
+.gestures li {
+  display: grid; grid-template-columns: 40px 1fr; align-items: baseline;
+  padding: 16px 0; border-bottom: 1px solid var(--line);
+}
+.gestures .n { font: 400 11px var(--mono); color: var(--mist); letter-spacing: .1em; }
+.gestures .v { font: 400 clamp(2rem, 9.5vw, 3.6rem)/1.05 var(--display); min-width: 0; }
+.gestures li:nth-child(even) .v { font-style: italic; padding-left: 12%; }
+.gestures li:last-child .v { color: var(--flash); transition: color 1s; }
+.slow { margin: 30px 0 0; max-width: 46ch; color: var(--bone-2); }
+
+.contact { padding-block: 110px 48px; }
+.contact h2 { margin: 0 0 18px; font: 400 clamp(2.4rem, 10vw, 4.2rem)/1 var(--display); text-wrap: balance; }
+.contact h2 em { color: var(--flash); transition: color 1s; }
+.contact p { max-width: 44ch; color: var(--bone-2); margin: 0; }
+.cta {
+  display: inline-flex; align-items: center; gap: 12px; margin-top: 30px;
+  padding: 16px 26px; border-radius: 99px; text-decoration: none;
+  font: 400 12px/1 var(--mono); letter-spacing: .18em; text-transform: uppercase;
+  color: var(--ink); background: linear-gradient(135deg, var(--wire-a), var(--wire-b));
+}
+footer { padding-block: 32px 48px; border-top: 1px solid var(--line); }
+footer p { margin: 0; font: 300 13px/1.6 var(--body); color: var(--mist); max-width: 60ch; }
+
+@media (min-width: 760px) {
+  .title { margin-top: -10%; }
+  .stone-sheet { grid-template-columns: 180px 1fr; }
+  .stone-sheet canvas { width: 180px; height: 194px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}
+</style>
 </head>
 <body>
-  <div class="sky" aria-hidden="true"></div>
 
-  <header class="topbar">
-    <a href="#top" class="brand">La Culla <i>della</i> Luna</a>
-    <a href="#contatti" class="topbar-cta">Contatti</a>
-  </header>
+<header class="hero">
+  <div class="wrap">
+    <div class="topline">
+      <span class="label">Messina · 38°11′N 15°33′E</span>
+      <span class="label moon-now"><span id="moonText">Luna di stanotte</span><canvas id="moonIcon" width="36" height="36" aria-hidden="true"></canvas></span>
+    </div>
 
-  <main id="top">
-    <!-- HERO: la pietra al centro -->
-    <section class="hero">
-      <p class="eyebrow">Gioielli artigianali · Sicilia</p>
-      <div class="stage" id="heroStage">
-        <div class="halo" aria-hidden="true"></div>
-        <svg class="jewel" viewBox="0 0 300 340" role="img" aria-label="Una pietra naturale avvolta in un intreccio di fili, cullata da una falce di luna">
-          <defs>
-            <radialGradient id="g-body" cx="42%" cy="38%" r="70%">
-              <stop offset="0%" class="s-light"/>
-              <stop offset="55%" class="s-mid"/>
-              <stop offset="100%" class="s-deep"/>
-            </radialGradient>
-            <radialGradient id="g-glow" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" class="s-glow" stop-opacity=".95"/>
-              <stop offset="100%" class="s-glow" stop-opacity="0"/>
-            </radialGradient>
-            <linearGradient id="g-wire" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" class="w-light"/>
-              <stop offset="50%" class="w-mid"/>
-              <stop offset="100%" class="w-deep"/>
-            </linearGradient>
-            <linearGradient id="g-gold" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#f6e3b0"/>
-              <stop offset="45%" stop-color="#c9a15a"/>
-              <stop offset="100%" stop-color="#8a6526"/>
-            </linearGradient>
-            <clipPath id="c-stone"><ellipse cx="150" cy="140" rx="78" ry="98"/></clipPath>
-            <filter id="f-blur" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="14"/></filter>
-          </defs>
+    <div class="stage" id="stage" role="img" aria-label="Una pietra naturale avvolta in un intreccio di fili, cullata da una falce di luna. Trascina per muovere la luce, tocca per cambiare pietra.">
+      <canvas id="hero"></canvas>
+    </div>
 
-          <!-- catenina -->
-          <path d="M150 0 V34" stroke="url(#g-wire)" stroke-width="2" stroke-dasharray="3 3"/>
-          <circle cx="150" cy="38" r="5" fill="none" stroke="url(#g-wire)" stroke-width="2.5"/>
+    <h1 class="title"><span>La culla</span><em>della <b>Luna</b></em></h1>
 
-          <!-- intreccio di fili a raggiera (generato da script.js) -->
-          <g id="rays" stroke="url(#g-wire)" fill="none" stroke-linecap="round"></g>
-          <!-- castone in filo intrecciato -->
-          <ellipse cx="150" cy="140" rx="88" ry="108" fill="none" stroke="url(#g-wire)" stroke-width="3"/>
-          <ellipse cx="150" cy="140" rx="84" ry="104" fill="none" stroke="url(#g-wire)" stroke-width="4" stroke-dasharray="2.5 2"/>
-          <ellipse cx="150" cy="140" rx="80" ry="100" fill="#0b0d1a"/>
-
-          <!-- pietra -->
-          <g clip-path="url(#c-stone)">
-            <ellipse cx="150" cy="140" rx="78" ry="98" fill="url(#g-body)"/>
-            <ellipse class="sheen" cx="150" cy="140" rx="60" ry="44" fill="url(#g-glow)" filter="url(#f-blur)"/>
-            <ellipse cx="120" cy="92" rx="26" ry="14" fill="#fff" opacity=".35" transform="rotate(-30 120 92)" filter="url(#f-blur)"/>
-            <ellipse cx="118" cy="88" rx="9" ry="4" fill="#fff" opacity=".75" transform="rotate(-30 118 88)"/>
-          </g>
-
-          <!-- la falce di luna che culla la pietra -->
-          <path d="M40 200 C 58 310, 242 310, 260 200 C 238 270, 62 270, 40 200 Z" fill="url(#g-wire)"/>
-          <circle cx="40" cy="200" r="4" class="w-dot"/>
-          <circle cx="260" cy="200" r="4" class="w-dot"/>
-        </svg>
+    <div class="stone-bar">
+      <div class="stone-now">
+        <span class="label">Trascina · tocca per cambiare</span>
+        <b id="stoneName">Labradorite</b>
       </div>
-      <h1>La Culla <i>della</i> Luna</h1>
-      <p class="tagline">Pietre naturali e fili intrecciati a mano<br>da <strong>Alessia Iraci</strong>.</p>
-      <p class="stone-name" id="heroStoneName">Labradorite</p>
       <div class="metal" role="group" aria-label="Filo">
         <button type="button" data-metal="argento" aria-pressed="true">Argento</button>
         <button type="button" data-metal="oro" aria-pressed="false">Oro</button>
       </div>
-      <a class="scroll-hint" href="#pietre" aria-label="Scopri le pietre"><span></span></a>
-    </section>
+    </div>
 
-    <!-- LE PIETRE: scorri e la pietra in alto cambia -->
-    <section class="stones" id="pietre">
-      <h2>Le pietre</h2>
-      <p class="lead">Tocca una pietra: diventa lei la protagonista.</p>
-      <div class="stone-rail" id="stoneRail" role="listbox" aria-label="Scegli una pietra"></div>
-      <article class="stone-card" id="stoneCard" aria-live="polite">
-        <h3 id="stoneTitle"></h3>
-        <p id="stoneText"></p>
-      </article>
-    </section>
+    <p class="lede">Pietre naturali e fili di rame placcati in oro e argento, intrecciati a mano da Alessia Iraci.<small>Ogni pezzo è unico.</small></p>
+  </div>
+</header>
 
-    <!-- STORIA -->
-    <section class="story" id="storia">
-      <p class="eyebrow">La storia</p>
-      <h2>Le mani di Alessia</h2>
-      <blockquote class="big-quote">
-        «La culla della Luna nasce con l’idea di essere rifugio per anime inquiete. Posto nel quale concedersi di essere fragili. Porto e mare aperto. Culla che protegge, permettendo al nostro sguardo di volare sempre più in alto.»
-        <cite>Alessia</cite>
-      </blockquote>
-      <p>Alessia Iraci è nata a Messina nel 1989. Dopo gli studi umanistici si avvicina alla fotografia, poi si reinventa e prende una strada nuova: fili di rame placcati in oro e argento, pietre colorate e intrecci, alla ricerca di una forma tutta sua.</p>
-      <p>Un tempo lento: scegliere la pietra, accostare materiali e colori, lavorare, correggere, intrecciare. Ogni gioiello è un pezzo unico.</p>
-      <p>La Luna non è solo un riferimento estetico. È una presenza che invita a guardarsi dentro, ad accettare anche le parti meno luminose di sé, e a riconoscere che proprio nelle fragilità può nascondersi una possibilità di crescita.</p>
-      <a class="text-link" href="https://livinginthecity.it/la-culla-della-luna-gioielli-alessia-iraci/" target="_blank" rel="noopener">Leggi la sua storia su Living in the City →</a>
-    </section>
-
-    <!-- CREAZIONI -->
-    <section class="gallery" id="creazioni">
-      <p class="eyebrow">Creazioni</p>
-      <h2>Pezzi unici</h2>
-      <p class="lead">Scorri.</p>
-      <!-- Per usare foto vere: metti i file in /images e sostituisci ogni <div class="ph"> con <img src="images/nome.jpg" alt="..."> -->
-      <div class="gallery-rail" id="galleryRail"></div>
-    </section>
-
-    <!-- CONTATTI -->
-    <section class="contact" id="contatti">
-      <div class="mini-moon" aria-hidden="true"></div>
-      <h2>Vuoi un gioiello tutto tuo?</h2>
-      <p>Ogni pezzo è unico. Scrivi ad Alessia per conoscere le creazioni disponibili o per sapere dove trovarla al prossimo mercatino.</p>
-      <div class="contact-actions">
-        <!-- Sostituire con i contatti reali -->
-        <a class="btn btn-gold" href="https://instagram.com/" target="_blank" rel="noopener">Instagram</a>
-        <a class="btn" href="mailto:info@example.com">Scrivi una mail</a>
+<main>
+  <section class="block" id="porto">
+    <div class="wrap">
+      <div class="block-head"><span class="label">Il rifugio</span><h2>Porto</h2></div>
+      <blockquote class="voice">La culla della Luna nasce con l’idea di essere rifugio per anime inquiete. Posto nel quale concedersi di essere fragili. Porto e mare aperto. Culla che protegge, permettendo al nostro sguardo di volare sempre più in alto.</blockquote>
+      <p class="label voice-by">Alessia Iraci</p>
+      <div class="prose">
+        <p class="drop">Alessia è nata a Messina nel 1989. Dopo un percorso di studi umanistici si avvicina alla fotografia, poi si reinventa e prende una strada nuova: fili di rame placcati in oro e argento, pietre colorate e intrecci, alla ricerca di una propria forma.</p>
+        <p>La Luna non è soltanto un riferimento estetico. È una presenza che invita a guardarsi dentro, ad accettare anche le parti meno luminose di sé, e a riconoscere che proprio nelle fragilità può nascondersi una possibilità di crescita.</p>
       </div>
-    </section>
-  </main>
+    </div>
+  </section>
 
-  <footer class="footer">
-    <p>La Culla della Luna · Gioielli con pietre naturali di Alessia Iraci</p>
-  </footer>
+  <section class="block" id="mare">
+    <div class="wrap">
+      <div class="block-head"><span class="label">La partenza</span><h2>Mare aperto</h2></div>
+      <p style="margin:0;max-width:40ch;color:var(--bone-2)">Ogni pietra ha la sua luce. Scegline una e guarda come cambia.</p>
+      <div class="rail" id="rail" role="group" aria-label="Pietre"></div>
+      <div class="stone-sheet">
+        <canvas id="mini" aria-hidden="true"></canvas>
+        <div aria-live="polite">
+          <h3 id="sheetName"></h3>
+          <p id="sheetText"></p>
+          <span class="label" id="sheetLight"></span>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  <script src="script.js"></script>
+  <section class="block" id="tempo">
+    <div class="wrap">
+      <div class="block-head"><span class="label">Il mestiere</span><h2>Un tempo lento</h2></div>
+      <ol class="gestures">
+        <li><span class="n">I</span><span class="v">accostare materiali e colori</span></li>
+        <li><span class="n">II</span><span class="v">lavorare</span></li>
+        <li><span class="n">III</span><span class="v">correggere</span></li>
+        <li><span class="n">IV</span><span class="v">intrecciare</span></li>
+      </ol>
+      <p class="slow">Un tempo lento, che appartiene a chi ha deciso di restituire valore agli oggetti attraverso l’artigianalità.</p>
+    </div>
+  </section>
+
+  <section class="contact" id="contatti">
+    <div class="wrap">
+      <h2>Trova la tua <em>pietra</em>.</h2>
+      <p>Ogni gioiello nasce una volta sola. Scrivi ad Alessia per le creazioni disponibili e per sapere dove trovarla al prossimo mercatino.</p>
+      <a class="cta" href="https://www.instagram.com/" target="_blank" rel="noopener">Instagram →</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>La Culla della Luna · gioielli di Alessia Iraci, Sicilia. Citazioni dall’articolo di Natola Santi su <a href="https://livinginthecity.it/la-culla-della-luna-gioielli-alessia-iraci/" target="_blank" rel="noopener">Living in the City</a>, 6 novembre 2026.</p>
+  </div>
+</footer>
+
+<script>
+(() => {
+  const STONES = [
+    { id: "labradorite", name: "Labradorite", kind: "flash",
+      c: ["#5d7c8c", "#26404d", "#0a1419"], flash: ["#2f9bff", "#25e0c8", "#e8c95a"],
+      text: "Scura a prima vista. Poi la inclini e si accende di lampi blu, verdi e oro.", light: "Luce: a lampi, cambia con l’angolo" },
+    { id: "luna", name: "Pietra di luna", kind: "sheen",
+      c: ["#f6f7fb", "#c9cfdd", "#7d869c"], flash: ["#8fc8ff", "#bfe2ff", "#ffffff"],
+      text: "Lattiginosa, con un velo azzurro che scivola sulla superficie.", light: "Luce: un velo che fluttua" },
+    { id: "ametista", name: "Ametista", kind: "deep",
+      c: ["#e7c8ff", "#8e4fcf", "#2c0f4f"], flash: ["#b77cff", "#f0d9ff", "#a160ff"],
+      text: "Un viola profondo, più scuro al centro e chiaro dove la luce lo attraversa.", light: "Luce: dal profondo" },
+    { id: "quarzo", name: "Quarzo rosa", kind: "deep",
+      c: ["#ffeef2", "#eeb2c1", "#a85f78"], flash: ["#ff8fb4", "#fff3f6", "#ffc4d4"],
+      text: "Un rosa tenue, quasi nebbioso, che si scalda in mano.", light: "Luce: diffusa e morbida" },
+    { id: "turchese", name: "Turchese", kind: "veins",
+      c: ["#c9f6ee", "#3cb8b2", "#0f5e67"], flash: ["#3fe0d2", "#d0fff8", "#3cb8b2"],
+      text: "Il colore del mare basso, attraversato da venature come una mappa.", light: "Luce: opaca, con venature" },
+    { id: "corniola", name: "Corniola", kind: "deep",
+      c: ["#ffd6b0", "#e06a2c", "#6e200b"], flash: ["#ff7a35", "#ffd0a6", "#ff6a20"],
+      text: "Arancio caldo come il tramonto sullo Stretto.", light: "Luce: calda, traslucida" },
+    { id: "onice", name: "Onice", kind: "onyx",
+      c: ["#5a5f6e", "#16181f", "#020203"], flash: ["#8f9cd0", "#ffffff", "#6c7aa8"],
+      text: "Nero lucido ed essenziale. Fa brillare il filo intorno.", light: "Luce: uno specchio nero" },
+  ];
+
+  const root = document.documentElement;
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const hex = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
+  const mix = (a, b, t) => a.map((v, i) => v + (b[i] - v) * t);
+  const rgba = (c, a = 1) => `rgba(${c[0] | 0},${c[1] | 0},${c[2] | 0},${a})`;
+  const SILVER = [hex("#f2f3f6"), hex("#9ea3ae")], GOLD = [hex("#f7e6b8"), hex("#b98d43")];
+
+  const S = {
+    i: 0,
+    col: STONES[0].c.map(hex), fl: STONES[0].flash.map(hex),
+    kind: STONES[0].kind, kindFrom: STONES[0].kind, fade: 1,
+    wire: SILVER.map(c => c.slice()), wireT: SILVER,
+    lx: 0, ly: 0, tx: 0, ty: 0, idle: true, t0: performance.now(),
+  };
+  let target = { col: S.col, fl: S.fl };
+
+  // venature del turchese, generate una volta
+  const veins = [];
+  (function () {
+    let seed = 7; const r = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+    for (let k = 0; k < 9; k++) {
+      let x = r() * 2 - 1, y = r() * 2 - 1, a = r() * 6.28; const pts = [[x, y]];
+      for (let s = 0; s < 14; s++) { a += (r() - .5) * 1.4; x += Math.cos(a) * .09; y += Math.sin(a) * .09; pts.push([x, y]); }
+      veins.push({ pts, w: .6 + r() * 1.4 });
+    }
+  })();
+
+  function makeStone(canvas, full) {
+    const ctx = canvas.getContext("2d");
+    let W = 0, H = 0, dpr = 1, visible = true;
+    function resize() {
+      const r = canvas.getBoundingClientRect();
+      dpr = Math.min(devicePixelRatio || 1, 2);
+      W = r.width; H = r.height;
+      canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
+    }
+    new ResizeObserver(resize).observe(canvas);
+    new IntersectionObserver(e => { visible = e[0].isIntersecting; }).observe(canvas);
+    resize();
+
+    const tendrils = [];
+    for (let k = 0; k < 46; k++) tendrils.push({ a: (k / 46) * Math.PI * 2, len: k % 2 ? .08 : .14, curl: k % 2 ? 1 : -1, w: k % 2 ? 1 : 1.5 });
+    const ept = (cx, cy, rx, ry, a, s) => [cx + Math.cos(a) * rx * s, cy + Math.sin(a) * ry * s];
+
+    function texture(kind, alpha, cx, cy, rx, ry, t) {
+      if (alpha <= 0.01) return;
+      const L = [S.lx, S.ly];
+      ctx.save();
+      ctx.globalAlpha = alpha;
+      if (kind === "flash") {
+        ctx.globalCompositeOperation = "screen";
+        const dirs = [[.8, -.3], [-.6, .5], [.1, .9], [-.4, -.8], [.9, .6]];
+        dirs.forEach((d, k) => {
+          const dot = d[0] * L[0] + d[1] * L[1];
+          const inten = Math.max(0, Math.min(1, (dot + .15) * 1.6)) * (.75 + .25 * Math.sin(t * .9 + k * 2));
+          if (inten < .02) return;
+          const px = cx + (d[0] * .35 + Math.sin(t * .3 + k) * .08) * rx;
+          const py = cy + (d[1] * .35 + Math.cos(t * .25 + k) * .08) * ry;
+          const rad = rx * (.75 + .2 * Math.sin(t * .4 + k));
+          const c = S.fl[k % 3];
+          const g = ctx.createRadialGradient(px, py, 0, px, py, rad);
+          g.addColorStop(0, rgba(c, .95 * inten)); g.addColorStop(.45, rgba(c, .45 * inten)); g.addColorStop(1, rgba(c, 0));
+          ctx.fillStyle = g; ctx.fillRect(cx - rx, cy - ry, rx * 2, ry * 2);
+        });
+        ctx.globalCompositeOperation = "source-over";
+        ctx.translate(cx, cy); ctx.rotate(-.5);
+        ctx.strokeStyle = "rgba(0,0,0,.18)"; ctx.lineWidth = 1;
+        for (let k = -14; k <= 14; k++) { ctx.beginPath(); ctx.moveTo(-rx * 1.5, k * ry * .07 + Math.sin(k) * 3); ctx.lineTo(rx * 1.5, k * ry * .07 + Math.cos(k) * 3); ctx.stroke(); }
+      } else if (kind === "sheen") {
+        ctx.globalCompositeOperation = "screen";
+        const px = cx - L[0] * rx * .45, py = cy - L[1] * ry * .45 + Math.sin(t * .5) * ry * .05;
+        const g = ctx.createRadialGradient(px, py, 0, px, py, rx * .9);
+        g.addColorStop(0, rgba(S.fl[0], .85)); g.addColorStop(.5, rgba(S.fl[0], .3)); g.addColorStop(1, rgba(S.fl[0], 0));
+        ctx.fillStyle = g; ctx.fillRect(cx - rx, cy - ry, rx * 2, ry * 2);
+      } else if (kind === "deep" || kind === "onyx") {
+        ctx.globalCompositeOperation = "screen";
+        const px = cx - L[0] * rx * .35, py = cy + ry * .38 - L[1] * ry * .2;
+        const g = ctx.createRadialGradient(px, py, 0, px, py, rx * .7);
+        g.addColorStop(0, rgba(S.fl[1], kind === "onyx" ? .12 : .7)); g.addColorStop(1, rgba(S.fl[1], 0));
+        ctx.fillStyle = g; ctx.fillRect(cx - rx, cy - ry, rx * 2, ry * 2);
+        ctx.globalCompositeOperation = "source-over";
+        if (kind === "deep") {
+          ctx.strokeStyle = rgba(S.col[2], .22); ctx.lineWidth = 1;
+          for (let k = 1; k < 5; k++) { ctx.beginPath(); ctx.ellipse(cx + 4, cy + 6, rx * k * .2, ry * k * .2, .3, 0, 7); ctx.stroke(); }
+        }
+      } else if (kind === "veins") {
+        ctx.strokeStyle = "rgba(40,28,18,.55)"; ctx.lineCap = "round";
+        veins.forEach(v => {
+          ctx.lineWidth = v.w * (W / 400); ctx.beginPath();
+          v.pts.forEach(([x, y], k) => { const X = cx + x * rx, Y = cy + y * ry; k ? ctx.lineTo(X, Y) : ctx.moveTo(X, Y); });
+          ctx.stroke();
+        });
+      }
+      ctx.restore();
+    }
+
+    function frame(now) {
+      if (!visible || !W) return;
+      const t = (now - S.t0) / 1000;
+      const weave = reduce || !full ? 1 : Math.min(1, t / 2.6);
+      const ease = 1 - Math.pow(1 - weave, 3);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, W, H);
+
+      const cx = W / 2, cy = H * (full ? .42 : .46);
+      const rx = W * (full ? .25 : .3), ry = rx * 1.24;
+      const unit = W / 400;
+
+      const halo = ctx.createRadialGradient(cx, cy, rx * .4, cx, cy, rx * 2.2);
+      halo.addColorStop(0, rgba(S.fl[0], full ? .28 : .2)); halo.addColorStop(1, rgba(S.fl[0], 0));
+      ctx.fillStyle = halo; ctx.fillRect(0, 0, W, H);
+
+      const wg = ctx.createLinearGradient(cx - rx * 1.5, cy - ry * 1.5, cx + rx * 1.5, cy + ry * 1.5);
+      wg.addColorStop(0, rgba(S.wire[0])); wg.addColorStop(.5, rgba(mix(S.wire[0], S.wire[1], .7))); wg.addColorStop(1, rgba(mix(S.wire[1], [30, 30, 30], .35)));
+      ctx.strokeStyle = wg; ctx.lineCap = "round";
+
+      if (full) {
+        ctx.lineWidth = 1.4 * unit; ctx.setLineDash([3 * unit, 3 * unit]);
+        ctx.beginPath(); ctx.moveTo(cx, 0); ctx.lineTo(cx, cy - ry * 1.42); ctx.stroke(); ctx.setLineDash([]);
+        ctx.lineWidth = 2 * unit; ctx.beginPath(); ctx.arc(cx, cy - ry * 1.36, 6 * unit, 0, 7); ctx.stroke();
+      }
+
+      // raggi di filo a ricciolo, come un piccolo sole
+      tendrils.forEach((d, k) => {
+        const p = Math.max(0, Math.min(1, ease * 1.4 - (k / tendrils.length) * .4));
+        if (p <= 0) return;
+        const sway = Math.sin(t * .8 + k) * .02;
+        const [x0, y0] = ept(cx, cy, rx, ry, d.a, 1.13);
+        const out = 1.13 + d.len * 2.2 * p;
+        const [x1, y1] = ept(cx, cy, rx, ry, d.a + sway, out);
+        const [xc, yc] = ept(cx, cy, rx, ry, d.a + .12 * d.curl, (1.13 + out) / 2);
+        ctx.lineWidth = d.w * 1.6 * unit;
+        ctx.beginPath(); ctx.moveTo(x0, y0); ctx.quadraticCurveTo(xc, yc, x1, y1);
+        if (p > .9) ctx.arc(x1 + Math.cos(d.a) * 3 * unit, y1 + Math.sin(d.a) * 3 * unit, 3 * unit, d.a + Math.PI, d.a + Math.PI + 4.5 * d.curl, d.curl < 0);
+        ctx.stroke();
+      });
+
+      // castone: filo avvolto a spirale, si intreccia al caricamento
+      const turns = 150, end = Math.PI * 2 * ease;
+      ctx.lineWidth = 1.3 * unit; ctx.beginPath();
+      for (let a = 0; a <= end; a += .01) {
+        const w = Math.sin(a * turns) * 4 * unit;
+        const x = cx + Math.cos(a) * (rx * 1.065 + w), y = cy + Math.sin(a) * (ry * 1.055 + w);
+        a ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
+      }
+      ctx.stroke();
+      [1.0, 1.12].forEach((s, k) => {
+        ctx.lineWidth = (k ? 1.8 : 2.4) * unit;
+        ctx.beginPath(); ctx.ellipse(cx, cy, rx * s + unit, ry * s + unit, 0, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * ease); ctx.stroke();
+      });
+
+      // la pietra
+      ctx.save();
+      ctx.beginPath(); ctx.ellipse(cx, cy, rx, ry, 0, 0, 7); ctx.clip();
+      const bx = cx - rx * .25 - S.lx * rx * .2, by = cy - ry * .3 - S.ly * ry * .2;
+      const body = ctx.createRadialGradient(bx, by, rx * .05, cx, cy + ry * .1, ry * 1.1);
+      body.addColorStop(0, rgba(S.col[0])); body.addColorStop(.55, rgba(S.col[1])); body.addColorStop(1, rgba(S.col[2]));
+      ctx.fillStyle = body; ctx.fillRect(cx - rx, cy - ry, rx * 2, ry * 2);
+      texture(S.kindFrom, 1 - S.fade, cx, cy, rx, ry, t);
+      texture(S.kind, S.fade, cx, cy, rx, ry, t);
+      const rim = ctx.createRadialGradient(cx, cy, Math.min(rx, ry) * .7, cx, cy, ry * 1.05);
+      rim.addColorStop(0, "rgba(0,0,0,0)"); rim.addColorStop(1, "rgba(0,0,0,.55)");
+      ctx.fillStyle = rim; ctx.fillRect(cx - rx, cy - ry, rx * 2, ry * 2);
+      const hx = cx - rx * .38 + S.lx * rx * .18, hy = cy - ry * .46 + S.ly * ry * .14;
+      const hl = ctx.createRadialGradient(hx, hy, 0, hx, hy, rx * .42);
+      hl.addColorStop(0, "rgba(255,255,255,.55)"); hl.addColorStop(1, "rgba(255,255,255,0)");
+      ctx.fillStyle = hl; ctx.fillRect(cx - rx, cy - ry, rx * 2, ry * 2);
+      ctx.fillStyle = "rgba(255,255,255,.85)";
+      ctx.beginPath(); ctx.ellipse(hx, hy, rx * .1, rx * .045, -.5, 0, 7); ctx.fill();
+      ctx.restore();
+
+      // la falce di luna che culla la pietra
+      if (full) {
+        const y0 = cy + ry * .62, span = rx * 1.62;
+        ctx.save();
+        ctx.globalAlpha = ease;
+        ctx.beginPath();
+        ctx.moveTo(cx - span, y0);
+        ctx.bezierCurveTo(cx - span * .8, y0 + ry * 1.25, cx + span * .8, y0 + ry * 1.25, cx + span, y0);
+        ctx.bezierCurveTo(cx + span * .75, y0 + ry * .8, cx - span * .75, y0 + ry * .8, cx - span, y0);
+        const cg = ctx.createLinearGradient(cx - span, y0, cx + span, y0 + ry);
+        cg.addColorStop(0, rgba(S.wire[0])); cg.addColorStop(.6, rgba(S.wire[1])); cg.addColorStop(1, rgba(mix(S.wire[1], [0, 0, 0], .5)));
+        ctx.fillStyle = cg; ctx.fill();
+        ctx.fillStyle = rgba(S.wire[0]);
+        [-1, 1].forEach(s => { ctx.beginPath(); ctx.arc(cx + s * span, y0, 3.5 * unit, 0, 7); ctx.fill(); });
+        ctx.restore();
+      }
+    }
+    return { frame };
+  }
+
+  const hero = makeStone(document.getElementById("hero"), true);
+  const mini = makeStone(document.getElementById("mini"), false);
+
+  function loop(now) {
+    if (S.idle && !reduce) { const t = now / 1000; S.tx = Math.sin(t * .45) * .8; S.ty = Math.cos(t * .33) * .6; }
+    S.lx += (S.tx - S.lx) * .08; S.ly += (S.ty - S.ly) * .08;
+    S.col = S.col.map((c, k) => mix(c, target.col[k], .07));
+    S.fl = S.fl.map((c, k) => mix(c, target.fl[k], .07));
+    S.wire = S.wire.map((c, k) => mix(c, S.wireT[k], .08));
+    S.fade = Math.min(1, S.fade + .035);
+    hero.frame(now); mini.frame(now);
+    requestAnimationFrame(loop);
+  }
+
+  const rail = document.getElementById("rail");
+  STONES.forEach((s, i) => {
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "chip";
+    b.style.cssText = `--l:${s.c[0]};--m:${s.c[1]};--d:${s.c[2]};--g:${s.flash[0]}`;
+    b.innerHTML = `<i></i>${s.name}`;
+    b.addEventListener("click", () => setStone(i));
+    rail.appendChild(b);
+  });
+
+  function setStone(i) {
+    S.i = (i + STONES.length) % STONES.length;
+    const s = STONES[S.i];
+    target = { col: s.c.map(hex), fl: s.flash.map(hex) };
+    S.kindFrom = S.kind; S.kind = s.kind; S.fade = S.kindFrom === s.kind ? 1 : 0;
+    root.style.setProperty("--flash", s.flash[0]);
+    document.getElementById("stoneName").textContent = s.name;
+    document.getElementById("sheetName").textContent = s.name;
+    document.getElementById("sheetText").textContent = s.text;
+    document.getElementById("sheetLight").textContent = s.light;
+    rail.querySelectorAll(".chip").forEach((c, k) => c.setAttribute("aria-pressed", k === S.i));
+  }
+
+  document.querySelectorAll("[data-metal]").forEach(b => b.addEventListener("click", () => {
+    root.dataset.metal = b.dataset.metal;
+    S.wireT = b.dataset.metal === "oro" ? GOLD : SILVER;
+    document.querySelectorAll("[data-metal]").forEach(o => o.setAttribute("aria-pressed", o === b));
+  }));
+
+  // trascina = muovi la luce; tocco breve = pietra successiva
+  const stage = document.getElementById("stage");
+  let down = null, idleTimer;
+  function aim(e) {
+    const r = stage.getBoundingClientRect();
+    S.tx = Math.max(-1, Math.min(1, ((e.clientX - r.left) / r.width) * 2 - 1));
+    S.ty = Math.max(-1, Math.min(1, ((e.clientY - r.top) / r.height) * 2 - 1));
+    S.idle = false; clearTimeout(idleTimer); idleTimer = setTimeout(() => (S.idle = true), 4000);
+  }
+  stage.addEventListener("pointerdown", e => { down = { x: e.clientX, y: e.clientY, t: performance.now() }; aim(e); });
+  stage.addEventListener("pointermove", e => { if (e.pointerType === "mouse" || down) aim(e); });
+  stage.addEventListener("pointerup", e => {
+    if (down && Math.hypot(e.clientX - down.x, e.clientY - down.y) < 8 && performance.now() - down.t < 350) setStone(S.i + 1);
+    down = null;
+  });
+  stage.addEventListener("pointercancel", () => { down = null; });
+  addEventListener("deviceorientation", e => {
+    if (e.gamma == null) return;
+    aim({ clientX: 0, clientY: 0 });
+    S.tx = Math.max(-1, Math.min(1, e.gamma / 30)); S.ty = Math.max(-1, Math.min(1, (e.beta - 45) / 30));
+  });
+
+  // la luna di stanotte
+  (function moon() {
+    const P = 29.530588853, ref = Date.UTC(2000, 0, 6, 18, 14) / 864e5;
+    const age = (((Date.now() / 864e5 - ref) % P) + P) % P;
+    const f = (1 - Math.cos((2 * Math.PI * age) / P)) / 2;
+    const names = ["Luna nuova", "Luna crescente", "Primo quarto", "Gibbosa crescente", "Luna piena", "Gibbosa calante", "Ultimo quarto", "Luna calante"];
+    const idx = Math.floor((age / P) * 8 + .5) % 8;
+    document.getElementById("moonText").textContent = `Stanotte: ${names[idx]} · ${Math.round(f * 100)}%`;
+    const x = document.getElementById("moonIcon").getContext("2d"), R = 16;
+    x.translate(18, 18);
+    x.fillStyle = "rgba(255,255,255,.14)"; x.beginPath(); x.arc(0, 0, R, 0, 7); x.fill();
+    const waxing = age < P / 2, k = Math.cos((2 * Math.PI * age) / P);
+    x.fillStyle = "#ebe5d6"; x.beginPath();
+    x.arc(0, 0, R, -Math.PI / 2, Math.PI / 2, !waxing);
+    x.ellipse(0, 0, Math.abs(k) * R, R, 0, Math.PI / 2, -Math.PI / 2, (k > 0) === waxing);
+    x.fill();
+  })();
+
+  setStone(0);
+  requestAnimationFrame(loop);
+})();
+</script>
 </body>
 </html>
