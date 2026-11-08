@@ -59,9 +59,9 @@ button { font: inherit; color: inherit; }
 .shot .zoom { position: absolute; inset: 0; transform-origin: 50% 50%; animation: breathe 22s ease-in-out infinite alternate; }
 .shot img { width: 100%; height: 100% !important; object-fit: cover; }
 .glint {
-  position: absolute; left: 50%; top: 50%; width: 26%; aspect-ratio: .9; border-radius: 50%;
+  position: absolute; left: 50%; top: 50%; width: 16%; aspect-ratio: .8; border-radius: 50%;
   translate: calc(-50% + var(--gx, 0) * 7%) calc(-50% + var(--gy, 0) * 7%);
-  background: radial-gradient(closest-side, #cfe2ffcc, #8fb6ff55 45%, transparent 75%);
+  background: radial-gradient(closest-side, #fff3d0cc, #ffd27a55 45%, transparent 75%);
   mix-blend-mode: screen; pointer-events: none; animation: shimmer 4.5s ease-in-out infinite; transition: translate .4s ease-out;
 }
 .shot::after {
@@ -169,6 +169,10 @@ dialog.sheet::backdrop { background: #141a1299; backdrop-filter: blur(3px); }
 .prose p { margin: 0; }
 .prose .drop::first-letter { float: left; font: 400 4.2rem/.8 var(--display); padding: 6px 10px 0 0; color: var(--bone); }
 
+.worn { margin: 44px 0 0; max-width: 520px; }
+.worn img { width: 100%; border-radius: 3px; }
+.worn figcaption { margin-top: 10px; }
+
 /* ---------- COME SONO FATTI ---------- */
 .made { padding-block: 96px 24px; }
 .facts { list-style: none; margin: 0; padding: 0; display: grid; }
@@ -215,7 +219,7 @@ footer p { margin: 0; font: 300 13px/1.6 var(--body); color: var(--mist); max-wi
   </div>
   <div class="shot" id="shot">
     <div class="zoom">
-      <img src="images/sole-hero.jpg" width="720" height="900" alt="Ciondolo con pietra di luna dai riflessi azzurri, circondata da raggi di filo intrecciato, nella sua scatola di velluto nero.">
+      <img src="images/conchiglia-hero.jpg" width="720" height="900" alt="Collana conchiglia con labradorite dorata e medaglietta del sole, nella sua scatola su un libro aperto.">
       <div class="glint" aria-hidden="true"></div>
     </div>
   </div>
@@ -259,6 +263,10 @@ footer p { margin: 0; font: 300 13px/1.6 var(--body); color: var(--mist); max-wi
         <p>Questa antica tecnica del wire wrapping mi permette di dar vita ad intrecci astratti che sembrano trovare una loro forma.</p>
         <p>Luna che sussurra, consigliando di immergerci nelle nostre ombre, perché solo in quell’abisso riusciremo a scorgere la vera luce.</p>
       </div>
+      <figure class="worn">
+        <img src="images/indossata-labradorite.jpg" width="900" height="1200" loading="lazy" alt="Ciondolo con labradorite avvolta in filo dorato, indossato su una camicia a righe azzurre.">
+        <figcaption class="label">Labradorite e filo dorato, indossata</figcaption>
+      </figure>
     </div>
   </section>
 
