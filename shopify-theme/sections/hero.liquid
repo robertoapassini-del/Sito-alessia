@@ -18,8 +18,8 @@
       {%- else -%}
         <img
           src="{{ 'conchiglia-hero.jpg' | asset_url }}"
-          width="720"
-          height="900"
+          width="1200"
+          height="1500"
           alt="{{ section.settings.image_alt | escape }}"
           fetchpriority="high"
         >
@@ -63,7 +63,7 @@
       "type": "image_picker",
       "id": "image",
       "label": "Foto",
-      "info": "Meglio verticale (4:5) con la pietra al centro. Se vuota, usa la foto della collana conchiglia."
+      "info": "Carica la foto originale, alla risoluzione più alta possibile (almeno 1500 px di larghezza), verticale con la pietra al centro. Se vuota, usa la foto della collana conchiglia."
     },
     {
       "type": "text",
@@ -89,7 +89,7 @@
       "max": 100,
       "step": 1,
       "unit": "%",
-      "default": 50
+      "default": 49
     },
     {
       "type": "range",
@@ -99,7 +99,7 @@
       "max": 100,
       "step": 1,
       "unit": "%",
-      "default": 50
+      "default": 51
     },
     {
       "type": "range",
@@ -109,7 +109,7 @@
       "max": 40,
       "step": 1,
       "unit": "%",
-      "default": 16
+      "default": 11
     },
     {
       "type": "header",

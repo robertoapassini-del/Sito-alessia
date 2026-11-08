@@ -217,7 +217,7 @@ dialog.sheet::backdrop { background: #000a; backdrop-filter: blur(3px); }
 .footer-nav { display: flex; flex-wrap: wrap; gap: 8px 18px; }
 .footer-nav a { font: 400 11px/1.6 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--mist); text-decoration: none; }
 
-@keyframes breathe { from { transform: scale(1); } to { transform: scale(1.08); } }
+@keyframes breathe { from { transform: scale(1); } to { transform: scale(1.035); } }
 @keyframes shimmer { 0%, 100% { opacity: .35; } 50% { opacity: .9; } }
 @media (min-width: 700px) {
   .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px 18px; }
