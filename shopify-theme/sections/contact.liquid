@@ -1,0 +1,75 @@
+<section class="contact" id="contatti">
+  <div class="wrap">
+    <h2>{{ section.settings.heading_1 }} <em>{{ section.settings.heading_2 }}</em></h2>
+    {%- if section.settings.text != blank -%}
+      <p>{{ section.settings.text }}</p>
+    {%- endif -%}
+    {%- if section.settings.email != blank -%}
+      <div class="mail">
+        <code data-email>{{ section.settings.email }}</code>
+        <button type="button" class="btn" data-copy-email>Copia</button>
+      </div>
+    {%- endif -%}
+
+    {%- if section.settings.show_form -%}
+      {%- form 'contact', id: 'ContactForm', class: 'contact-form' -%}
+        {%- if form.posted_successfully? -%}
+          <p class="form-ok" role="status">Grazie! Il messaggio è arrivato ad Alessia.</p>
+        {%- elsif form.errors -%}
+          <p class="form-err" role="alert">Controlla i campi: {{ form.errors | default_errors }}</p>
+        {%- endif -%}
+        <label for="ContactName">Nome</label>
+        <input id="ContactName" type="text" name="contact[name]" autocomplete="name" value="{{ form.name }}">
+        <label for="ContactEmail">Email</label>
+        <input id="ContactEmail" type="email" name="contact[email]" autocomplete="email" required value="{{ form.email }}">
+        <label for="ContactBody">Messaggio</label>
+        <textarea id="ContactBody" name="contact[body]" rows="5" required placeholder="Per esempio: vorrei un anello con labradorite, misura 15 mm">{{ form.body }}</textarea>
+        <button type="submit" class="btn btn-gold">Invia ad Alessia</button>
+      {%- endform -%}
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Contatti",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading_1",
+      "label": "Titolo",
+      "default": "Scrivi ad"
+    },
+    {
+      "type": "text",
+      "id": "heading_2",
+      "label": "Titolo, parola colorata",
+      "default": "Alessia."
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Testo",
+      "default": "Per un pezzo già venduto, una pietra che ti piace o un anello su misura."
+    },
+    {
+      "type": "text",
+      "id": "email",
+      "label": "Email da mostrare",
+      "default": "alessiairaci952@gmail.com"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_form",
+      "label": "Mostra il modulo di contatto",
+      "info": "I messaggi arrivano all'email del negozio impostata su Shopify.",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Contatti"
+    }
+  ]
+}
+{% endschema %}

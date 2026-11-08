@@ -1,0 +1,58 @@
+{%- comment -%}
+  Scheda prodotto: la foto è ingrandita sulla pietra, il nome della pietra è il titolo.
+  Uso: {% render 'product-card', product: product %}
+{%- endcomment -%}
+{%- liquid
+  capture stone
+    render 'stone-name', product: product
+  endcapture
+  assign stone = stone | strip
+  assign first_word = product.title | downcase | split: ' ' | first
+  assign kind = 'Collane'
+  assign zoom = '1.55'
+  if first_word == 'anello'
+    assign kind = 'Anelli'
+    assign zoom = '1.18'
+  elsif first_word == 'bracciale'
+    assign kind = 'Bracciali'
+    assign zoom = '1.18'
+  endif
+  if stone != blank
+    assign heading = stone
+  else
+    assign heading = product.title
+  endif
+  assign alt = product.title | append: ' – ' | append: stone
+-%}
+<a
+  class="card{% unless product.available %} sold{% endunless %}"
+  href="{{ product.url }}"
+  data-card
+  data-kind="{{ kind }}"
+  data-stone="{{ stone | escape }}"
+  data-avail="{{ product.available }}"
+>
+  <span class="ph" style="--z: {{ zoom }}">
+    {%- if product.featured_media -%}
+      {{
+        product.featured_media
+        | image_url: width: 720
+        | image_tag:
+          widths: '360, 540, 720',
+          sizes: '(min-width: 1000px) 25vw, (min-width: 700px) 33vw, 50vw',
+          loading: 'lazy',
+          alt: alt
+      }}
+    {%- endif -%}
+    {%- unless product.available -%}
+      <span class="tag">Venduto</span>
+    {%- endunless -%}
+  </span>
+  <span class="card-text">
+    <b>{{ heading }}</b>
+    <span class="meta">
+      <span class="price">{{ product.price | money }}</span>
+      <span class="label">{{ product.title }}</span>
+    </span>
+  </span>
+</a>

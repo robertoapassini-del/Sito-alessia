@@ -1,0 +1,17 @@
+<article class="page wrap">
+  <div class="head">
+    <span class="label">{{ article.published_at | date: '%d/%m/%Y' }}</span>
+    <h1 class="h2">{{ article.title }}</h1>
+  </div>
+  {%- if article.image -%}
+    {{ article.image | image_url: width: 1400 | image_tag: widths: '600, 900, 1400', sizes: '(min-width: 1120px) 1088px, 100vw', class: 'article-img' }}
+  {%- endif -%}
+  <div class="rte prose">{{ article.content }}</div>
+</article>
+
+{% schema %}
+{
+  "name": "Articolo",
+  "settings": []
+}
+{% endschema %}

@@ -1,0 +1,70 @@
+{%- liquid
+  assign coll = section.settings.collection
+  if coll == blank
+    assign coll = collections.all
+  endif
+-%}
+<section class="shop" id="collezione" data-shop>
+  <div class="wrap">
+    <div class="head">
+      {%- if section.settings.label != blank -%}
+        <span class="label">{{ section.settings.label }}</span>
+      {%- endif -%}
+      <h2>{{ section.settings.heading }}</h2>
+    </div>
+    {% render 'filters' %}
+    <div class="grid" data-grid>
+      {%- paginate coll.products by section.settings.limit -%}
+        {%- for product in coll.products -%}
+          {% render 'product-card', product: product %}
+        {%- else -%}
+          <p class="empty">Ancora nessun pezzo in questa collezione.</p>
+        {%- endfor -%}
+      {%- endpaginate -%}
+    </div>
+    {%- if coll.products_count > section.settings.limit -%}
+      <div class="hero-cta"><a class="btn" href="{{ coll.url }}">Vedi tutti i {{ coll.products_count }} pezzi →</a></div>
+    {%- endif -%}
+    <p class="empty" data-empty hidden>Nessun pezzo con questi filtri. Prova un’altra pietra.</p>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Collezione",
+  "settings": [
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collezione da mostrare",
+      "info": "Se vuota, mostra tutti i prodotti."
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Etichetta",
+      "default": "Pezzi unici"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Titolo",
+      "default": "La collezione"
+    },
+    {
+      "type": "range",
+      "id": "limit",
+      "label": "Numero massimo di pezzi",
+      "min": 10,
+      "max": 50,
+      "step": 5,
+      "default": 50
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collezione con filtri"
+    }
+  ]
+}
+{% endschema %}

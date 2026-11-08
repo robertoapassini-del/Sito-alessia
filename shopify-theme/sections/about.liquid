@@ -1,0 +1,98 @@
+<section class="about" id="chi-sono">
+  <div class="wrap">
+    <div class="head">
+      {%- if section.settings.label != blank -%}
+        <span class="label">{{ section.settings.label }}</span>
+      {%- endif -%}
+      <h2>{{ section.settings.heading }}</h2>
+    </div>
+    {%- if section.settings.quote != blank -%}
+      <blockquote>{{ section.settings.quote }}</blockquote>
+      {%- if section.settings.signature != blank -%}
+        <p class="label by">{{ section.settings.signature }}</p>
+      {%- endif -%}
+    {%- endif -%}
+    {%- if section.settings.text != blank -%}
+      <div class="prose rte">{{ section.settings.text }}</div>
+    {%- endif -%}
+    <figure class="worn">
+      {%- if section.settings.image != blank -%}
+        {{
+          section.settings.image
+          | image_url: width: 1040
+          | image_tag:
+            widths: '520, 780, 1040',
+            sizes: '(min-width: 560px) 520px, 100vw',
+            loading: 'lazy',
+            alt: section.settings.caption
+        }}
+      {%- else -%}
+        <img
+          src="{{ 'indossata-labradorite.jpg' | asset_url }}"
+          width="900"
+          height="1200"
+          loading="lazy"
+          alt="Ciondolo con labradorite avvolta in filo dorato, indossato su una camicia a righe azzurre."
+        >
+      {%- endif -%}
+      {%- if section.settings.caption != blank -%}
+        <figcaption class="label">{{ section.settings.caption }}</figcaption>
+      {%- endif -%}
+    </figure>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Chi sono",
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Etichetta",
+      "default": "Chi sono"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Titolo",
+      "default": "Porto e mare aperto"
+    },
+    {
+      "type": "textarea",
+      "id": "quote",
+      "label": "Citazione",
+      "default": "La culla della luna nasce con l’idea di essere rifugio per anime inquiete. Posto nel quale concedersi di essere fragili. Porto e mare aperto. Culla che protegge, permettendo al nostro sguardo di volare sempre più in alto."
+    },
+    {
+      "type": "text",
+      "id": "signature",
+      "label": "Firma",
+      "default": "Alessia Iraci"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Testo",
+      "default": "<p>Io sono Alessia, fotografa e creatrice di gioielli siciliana. Tramite l’arte riesco ad esprimere le mie emozioni, il mio sentire, il mio modo di vedere.</p><p>Questa antica tecnica del wire wrapping mi permette di dar vita ad intrecci astratti che sembrano trovare una loro forma.</p><p>Luna che sussurra, consigliando di immergerci nelle nostre ombre, perché solo in quell’abisso riusciremo a scorgere la vera luce.</p>"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Foto",
+      "info": "Se vuota, usa la foto della labradorite indossata."
+    },
+    {
+      "type": "text",
+      "id": "caption",
+      "label": "Didascalia",
+      "default": "Labradorite e filo dorato, indossata"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Chi sono"
+    }
+  ]
+}
+{% endschema %}

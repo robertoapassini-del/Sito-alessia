@@ -1,0 +1,25 @@
+<section class="page wrap">
+  <div class="head"><span class="label">Diario</span><h1 class="h2">{{ blog.title }}</h1></div>
+  {%- paginate blog.articles by 12 -%}
+    <ul class="facts">
+      {%- for article in blog.articles -%}
+        <li><b><a href="{{ article.url }}">{{ article.title }}</a></b><span>{{ article.published_at | date: '%d/%m/%Y' }}</span></li>
+      {%- else -%}
+        <li><span>Ancora nessun articolo.</span></li>
+      {%- endfor -%}
+    </ul>
+    {%- if paginate.pages > 1 -%}
+      <nav class="pagination" aria-label="Pagine">
+        {%- if paginate.previous -%}<a class="btn" href="{{ paginate.previous.url }}">← Precedenti</a>{%- endif -%}
+        {%- if paginate.next -%}<a class="btn" href="{{ paginate.next.url }}">Successivi →</a>{%- endif -%}
+      </nav>
+    {%- endif -%}
+  {%- endpaginate -%}
+</section>
+
+{% schema %}
+{
+  "name": "Blog",
+  "settings": []
+}
+{% endschema %}

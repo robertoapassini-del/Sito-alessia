@@ -1,0 +1,18 @@
+{%- comment -%}
+  Filtri per tipo, pietra e disponibilità. Agiscono sulle schede nello stesso contenitore [data-shop].
+  Le pietre vengono raccolte da theme.js leggendo data-stone dalle schede.
+{%- endcomment -%}
+<div class="filters" data-filters>
+  <div class="row">
+    <div class="kinds" role="group" aria-label="Tipo di gioiello">
+      <button type="button" data-kind="" aria-pressed="true">Tutto</button>
+      <button type="button" data-kind="Collane" aria-pressed="false">Collane</button>
+      <button type="button" data-kind="Bracciali" aria-pressed="false">Bracciali</button>
+      <button type="button" data-kind="Anelli" aria-pressed="false">Anelli</button>
+    </div>
+  </div>
+  <div class="stones" role="group" aria-label="Pietra" data-stones>
+    <button type="button" class="avail" data-avail-toggle aria-pressed="false"><i></i>Disponibili</button>
+  </div>
+</div>
+<p class="label count" data-count aria-live="polite"></p>

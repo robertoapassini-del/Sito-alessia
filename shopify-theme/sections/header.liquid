@@ -1,0 +1,28 @@
+<header class="site-header{% if template.name == 'index' %} over{% endif %}">
+  <div class="wrap header-row">
+    <a class="brand" href="{{ routes.root_url }}">{{ shop.name }}</a>
+    <nav class="nav" aria-label="Menu principale">
+      {%- for link in section.settings.menu.links -%}
+        <a href="{{ link.url }}"{% if link.active %} aria-current="page"{% endif %}>{{ link.title }}</a>
+      {%- endfor -%}
+    </nav>
+    <a class="cart-link" href="{{ routes.cart_url }}">
+      Carrello <span class="cart-count" data-cart-count>{{ cart.item_count }}</span>
+    </a>
+  </div>
+</header>
+
+{% schema %}
+{
+  "name": "Intestazione",
+  "class": "section-header",
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu",
+      "default": "main-menu"
+    }
+  ]
+}
+{% endschema %}

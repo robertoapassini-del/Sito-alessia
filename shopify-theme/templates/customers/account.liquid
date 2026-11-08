@@ -1,0 +1,14 @@
+<section class="page wrap account">
+  <div class="head"><span class="label">Account</span><h1 class="h2">Ciao {{ customer.first_name }}</h1></div>
+  <p><a class="label" href="{{ routes.account_logout_url }}">Esci</a> · <a class="label" href="{{ routes.account_addresses_url }}">Indirizzi ({{ customer.addresses_count }})</a></p>
+  <h2 class="h3">I tuoi ordini</h2>
+  {%- paginate customer.orders by 20 -%}
+    <ul class="facts">
+      {%- for order in customer.orders -%}
+        <li><b><a href="{{ order.customer_url }}">{{ order.name }}</a></b><span>{{ order.created_at | date: '%d/%m/%Y' }} · {{ order.fulfillment_status_label }} · {{ order.total_price | money }}</span></li>
+      {%- else -%}
+        <li><span>Non hai ancora fatto ordini.</span></li>
+      {%- endfor -%}
+    </ul>
+  {%- endpaginate -%}
+</section>

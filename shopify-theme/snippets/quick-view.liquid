@@ -1,0 +1,18 @@
+{%- comment -%} Scheda rapida che si apre dal basso quando si tocca un pezzo. Riempita da theme.js. {%- endcomment -%}
+<dialog class="sheet" data-sheet aria-labelledby="SheetTitle">
+  <button type="button" class="close" data-sheet-close aria-label="Chiudi">×</button>
+  <div class="pics" data-sheet-pics></div>
+  <div class="dots" data-sheet-dots></div>
+  <div class="body">
+    <span class="label" data-sheet-kind></span>
+    <h2 class="sheet-title" id="SheetTitle" data-sheet-title></h2>
+    <span class="price" data-sheet-price></span>
+    <ul data-sheet-list></ul>
+    <div class="actions">
+      <button type="button" class="btn btn-gold" data-sheet-add>Aggiungi al carrello</button>
+      <a class="btn" href="{{ routes.cart_url }}" data-sheet-cart hidden>Vai al carrello</a>
+      <a class="btn" href="#" data-sheet-link>Scheda completa</a>
+    </div>
+    <p class="label sheet-msg" data-sheet-msg aria-live="polite"></p>
+  </div>
+</dialog>

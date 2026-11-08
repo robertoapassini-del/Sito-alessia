@@ -1,0 +1,36 @@
+<section class="shop" data-shop>
+  <div class="wrap">
+    <div class="head">
+      <span class="label">Collezione</span>
+      <h1 class="h2">{{ collection.title }}</h1>
+      {%- if collection.description != blank -%}
+        <div class="rte collection-desc">{{ collection.description }}</div>
+      {%- endif -%}
+    </div>
+    {% render 'filters' %}
+    {%- paginate collection.products by 48 -%}
+      <div class="grid" data-grid>
+        {%- for product in collection.products -%}
+          {% render 'product-card', product: product %}
+        {%- else -%}
+          <p class="empty">Ancora nessun pezzo in questa collezione.</p>
+        {%- endfor -%}
+      </div>
+      <p class="empty" data-empty hidden>Nessun pezzo con questi filtri. Prova un’altra pietra.</p>
+      {%- if paginate.pages > 1 -%}
+        <nav class="pagination" aria-label="Pagine">
+          {%- if paginate.previous -%}<a class="btn" href="{{ paginate.previous.url }}">← Precedenti</a>{%- endif -%}
+          <span class="label">Pagina {{ paginate.current_page }} di {{ paginate.pages }}</span>
+          {%- if paginate.next -%}<a class="btn" href="{{ paginate.next.url }}">Successivi →</a>{%- endif -%}
+        </nav>
+      {%- endif -%}
+    {%- endpaginate -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Collezione",
+  "settings": []
+}
+{% endschema %}

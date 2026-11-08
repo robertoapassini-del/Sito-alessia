@@ -1,0 +1,161 @@
+{%- liquid
+  assign alt = section.settings.image.alt | default: section.settings.image_alt
+-%}
+<section class="hero">
+  <div class="shot" data-glint-area>
+    <div class="zoom">
+      {%- if section.settings.image != blank -%}
+        {{
+          section.settings.image
+          | image_url: width: 1440
+          | image_tag:
+            widths: '540, 720, 1080, 1440',
+            sizes: '(min-width: 720px) 720px, 100vw',
+            loading: 'eager',
+            fetchpriority: 'high',
+            alt: alt
+        }}
+      {%- else -%}
+        <img
+          src="{{ 'conchiglia-hero.jpg' | asset_url }}"
+          width="720"
+          height="900"
+          alt="{{ section.settings.image_alt | escape }}"
+          fetchpriority="high"
+        >
+      {%- endif -%}
+      {%- if section.settings.glint -%}
+        <div
+          class="glint"
+          style="left: {{ section.settings.glint_x }}%; top: {{ section.settings.glint_y }}%; width: {{ section.settings.glint_size }}%;"
+          aria-hidden="true"
+        ></div>
+      {%- endif -%}
+    </div>
+  </div>
+  <div class="wrap">
+    <h1 class="title">
+      <span>{{ section.settings.title_1 }}</span>
+      <em>{{ section.settings.title_2 }} <b>{{ section.settings.title_3 }}</b></em>
+    </h1>
+    {%- if section.settings.text != blank -%}
+      <p class="lede">{{ section.settings.text }}</p>
+    {%- endif -%}
+    <p class="label moon-now">
+      <canvas width="32" height="32" data-moon-icon aria-hidden="true"></canvas>
+      <span data-moon-text>Luna di stanotte</span>
+    </p>
+    {%- if section.settings.button_label != blank -%}
+      <div class="hero-cta">
+        <a class="btn btn-gold" href="{{ section.settings.button_link | default: '#collezione' }}">
+          {{- section.settings.button_label -}}
+        </a>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Foto principale",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Foto",
+      "info": "Meglio verticale (4:5) con la pietra al centro. Se vuota, usa la foto della collana conchiglia."
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Descrizione della foto (per chi non vede)",
+      "default": "Collana conchiglia con labradorite dorata e medaglietta del sole, nella sua scatola su un libro aperto."
+    },
+    {
+      "type": "header",
+      "content": "Riflesso sulla pietra"
+    },
+    {
+      "type": "checkbox",
+      "id": "glint",
+      "label": "Mostra il riflesso che si muove",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "glint_x",
+      "label": "Posizione orizzontale della pietra",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "glint_y",
+      "label": "Posizione verticale della pietra",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "glint_size",
+      "label": "Grandezza del riflesso",
+      "min": 6,
+      "max": 40,
+      "step": 1,
+      "unit": "%",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Testi"
+    },
+    {
+      "type": "text",
+      "id": "title_1",
+      "label": "Titolo, riga 1",
+      "default": "La culla"
+    },
+    {
+      "type": "text",
+      "id": "title_2",
+      "label": "Titolo, riga 2 (corsivo)",
+      "default": "della"
+    },
+    {
+      "type": "text",
+      "id": "title_3",
+      "label": "Titolo, parola colorata",
+      "default": "Luna"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Testo",
+      "default": "Gioielli in wire wrapping con pietre naturali, fatti a mano in Sicilia da Alessia Iraci."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Testo del pulsante",
+      "default": "Scegli la tua pietra"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Link del pulsante",
+      "info": "Se vuoto, porta alla collezione qui sotto."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Foto principale"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,30 @@
+<section class="shop">
+  <div class="wrap">
+    <div class="head"><span class="label">Catalogo</span><h1 class="h2">Collezioni</h1></div>
+    <div class="grid">
+      {%- for collection in collections -%}
+        {%- if collection.handle != 'all' -%}
+          <a class="card" href="{{ collection.url }}">
+            <span class="ph" style="--z: 1.3">
+              {%- assign img = collection.featured_image | default: collection.products.first.featured_image -%}
+              {%- if img -%}
+                {{ img | image_url: width: 720 | image_tag: widths: '360, 540, 720', sizes: '(min-width: 700px) 33vw, 50vw', loading: 'lazy' }}
+              {%- endif -%}
+            </span>
+            <span class="card-text">
+              <b>{{ collection.title }}</b>
+              <span class="meta"><span class="label">{{ collection.products_count }} pezzi</span></span>
+            </span>
+          </a>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Elenco collezioni",
+  "settings": []
+}
+{% endschema %}

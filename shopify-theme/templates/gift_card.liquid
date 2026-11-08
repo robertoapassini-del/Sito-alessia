@@ -1,0 +1,24 @@
+{%- layout none -%}
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Carta regalo – {{ shop.name }}</title>
+    {{ 'base.css' | asset_url | stylesheet_tag }}
+    {{ content_for_header }}
+  </head>
+  <body class="template-gift-card" style="--earth:#2b301d;--bone:#f0e8d3;--gold:#e2bb62;--on-gold:#2b301d;--line:#f0e8d324;--mist:#a09f84">
+    <main class="page wrap">
+      <div class="head"><span class="label">{{ shop.name }}</span><h1 class="h2">Carta regalo</h1></div>
+      {%- if gift_card.enabled == false or gift_card.expired -%}
+        <p class="label">Questa carta regalo non è più valida.</p>
+      {%- endif -%}
+      <p class="price big">{{ gift_card.balance | money }}</p>
+      <p class="label">Codice</p>
+      <p><code>{{ gift_card.code | format_code }}</code></p>
+      {%- if gift_card.expires_on -%}<p class="label">Scade il {{ gift_card.expires_on | date: '%d/%m/%Y' }}</p>{%- endif -%}
+      <div class="hero-cta"><a class="btn btn-gold" href="{{ shop.url }}">Vai al negozio</a></div>
+    </main>
+  </body>
+</html>

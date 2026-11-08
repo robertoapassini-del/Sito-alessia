@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="{{ settings.color_earth }}">
+    <link rel="canonical" href="{{ canonical_url }}">
+    {%- if settings.favicon != blank -%}
+      <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 64, height: 64 }}">
+    {%- endif -%}
+    <title>
+      {{ page_title }}
+      {%- if current_page != 1 %} – pagina {{ current_page }}{% endif -%}
+      {%- unless page_title contains shop.name %} – {{ shop.name }}{% endunless -%}
+    </title>
+    {%- if page_description -%}
+      <meta name="description" content="{{ page_description | escape }}">
+    {%- endif -%}
+    {% render 'meta-tags' %}
+    {% render 'fonts' %}
+
+    {%- liquid
+      assign earth = settings.color_earth
+      assign bone = settings.color_bone
+      assign gold = settings.color_gold
+    -%}
+    <style>
+      :root {
+        --earth: {{ earth }};
+        --earth-2: {{ earth | color_mix: bone, 92 }};
+        --bone: {{ bone }};
+        --bone-2: {{ bone | color_mix: earth, 82 }};
+        --mist: {{ bone | color_mix: earth, 58 }};
+        --line: {{ bone | color_modify: 'alpha', 0.14 }};
+        --gold: {{ gold }};
+        --on-gold: {{ earth }};
+        --paper: {{ earth | color_modify: 'alpha', 0.88 }};
+        --photo: {{ earth | color_darken: 18 }};
+      }
+    </style>
+    {{ 'base.css' | asset_url | stylesheet_tag }}
+
+    {{ content_for_header }}
+  </head>
+
+  <body class="template-{{ template.name }}">
+    <a class="skip-link" href="#main">Vai al contenuto</a>
+    {% section 'header' %}
+    <main id="main" tabindex="-1">
+      {{ content_for_layout }}
+    </main>
+    {% section 'footer' %}
+    {% render 'quick-view' %}
+
+    <script>
+      window.theme = {
+        cartAdd: {{ routes.cart_add_url | json }},
+        cartUrl: {{ routes.cart_url | json }},
+        currency: {{ cart.currency.iso_code | json }},
+        locale: {{ request.locale.iso_code | json }}
+      };
+    </script>
+    <script src="{{ 'theme.js' | asset_url }}" defer="defer"></script>
+  </body>
+</html>

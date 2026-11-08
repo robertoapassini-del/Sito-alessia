@@ -1,0 +1,15 @@
+<section class="page wrap account">
+  <div class="head"><span class="label">Account</span><h1 class="h2">Crea un account</h1></div>
+  {%- form 'create_customer', class: 'contact-form' -%}
+    {{ form.errors | default_errors }}
+    <label for="RegFirst">Nome</label>
+    <input id="RegFirst" type="text" name="customer[first_name]" autocomplete="given-name">
+    <label for="RegLast">Cognome</label>
+    <input id="RegLast" type="text" name="customer[last_name]" autocomplete="family-name">
+    <label for="RegEmail">Email</label>
+    <input id="RegEmail" type="email" name="customer[email]" autocomplete="email" required>
+    <label for="RegPassword">Password</label>
+    <input id="RegPassword" type="password" name="customer[password]" autocomplete="new-password" required>
+    <button type="submit" class="btn btn-gold">Crea account</button>
+  {%- endform -%}
+</section>

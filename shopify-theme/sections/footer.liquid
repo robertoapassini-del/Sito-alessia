@@ -1,0 +1,41 @@
+<footer class="site-footer">
+  <div class="wrap footer-grid">
+    <p class="footer-brand">{{ shop.name }}</p>
+    {%- if section.settings.text != blank -%}
+      <div class="footer-text">{{ section.settings.text }}</div>
+    {%- endif -%}
+    {%- if section.settings.menu.links.size > 0 -%}
+      <nav class="footer-nav" aria-label="Link utili">
+        {%- for link in section.settings.menu.links -%}
+          <a href="{{ link.url }}">{{ link.title }}</a>
+        {%- endfor -%}
+      </nav>
+    {%- endif -%}
+    <nav class="footer-nav" aria-label="Informative">
+      {%- for policy in shop.policies -%}
+        <a href="{{ policy.url }}">{{ policy.title }}</a>
+      {%- endfor -%}
+    </nav>
+    <p class="label">© {{ 'now' | date: '%Y' }} {{ shop.name }} · {{ powered_by_link }}</p>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Piè di pagina",
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Testo",
+      "default": "<p>Gioielli in wire wrapping con pietre naturali, fatti a mano in Sicilia da Alessia Iraci.</p>"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu",
+      "default": "footer"
+    }
+  ]
+}
+{% endschema %}

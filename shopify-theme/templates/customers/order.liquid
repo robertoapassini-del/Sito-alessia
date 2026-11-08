@@ -1,0 +1,15 @@
+<section class="page wrap account">
+  <div class="head"><span class="label">Ordine {{ order.name }}</span><h1 class="h2">{{ order.created_at | date: '%d/%m/%Y' }}</h1></div>
+  <p><a class="label" href="{{ routes.account_url }}">← Torna all’account</a></p>
+  <ul class="facts">
+    {%- for line_item in order.line_items -%}
+      <li><b>{{ line_item.title }}</b><span>{{ line_item.quantity }} × {{ line_item.final_price | money }}</span></li>
+    {%- endfor -%}
+    <li><b>Totale</b><span>{{ order.total_price | money_with_currency }}</span></li>
+    <li><b>Stato</b><span>{{ order.financial_status_label }} · {{ order.fulfillment_status_label }}</span></li>
+  </ul>
+  {%- if order.shipping_address -%}
+    <h2 class="h3">Spedizione</h2>
+    <p class="prose">{{ order.shipping_address | format_address }}</p>
+  {%- endif -%}
+</section>

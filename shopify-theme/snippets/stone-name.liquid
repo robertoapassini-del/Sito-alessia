@@ -1,0 +1,23 @@
+{%- comment -%}
+  Ricava il nome della pietra dalla descrizione del prodotto
+  ("Pietra naturale: Labradorite verde. ..."). Se non la trova, non stampa nulla.
+  Uso: {% render 'stone-name', product: product %}
+{%- endcomment -%}
+{%- liquid
+  assign d = product.description | strip_html | strip_newlines | replace: 'Aduaria', 'Adularia'
+  assign s = ''
+  if d contains 'naturale:'
+    assign s = d | split: 'naturale:' | last
+  elsif d contains 'naturali:'
+    assign s = d | split: 'naturali:' | last
+  elsif d contains 'Pietra:'
+    assign s = d | split: 'Pietra:' | last
+  endif
+  if s != blank
+    assign s = s | split: '.' | first | split: 'Lunghezza' | first | strip
+    assign first_letter = s | slice: 0 | upcase
+    assign rest = s | slice: 1, 200
+    assign s = first_letter | append: rest
+  endif
+  echo s
+-%}

@@ -1,0 +1,25 @@
+<section class="page wrap account">
+  <div class="head"><span class="label">Account</span><h1 class="h2">Accedi</h1></div>
+  {%- form 'customer_login', class: 'contact-form' -%}
+    {{ form.errors | default_errors }}
+    <label for="LoginEmail">Email</label>
+    <input id="LoginEmail" type="email" name="customer[email]" autocomplete="email" required>
+    {%- if form.password_needed -%}
+      <label for="LoginPassword">Password</label>
+      <input id="LoginPassword" type="password" name="customer[password]" autocomplete="current-password" required>
+    {%- endif -%}
+    <button type="submit" class="btn btn-gold">Accedi</button>
+    <a class="label" href="{{ routes.account_register_url }}">Crea un account</a>
+  {%- endform -%}
+  {%- form 'recover_customer_password', class: 'contact-form' -%}
+    {%- if form.posted_successfully? -%}<p class="form-ok" role="status">Ti abbiamo mandato un’email per reimpostare la password.</p>{%- endif -%}
+    <label for="RecoverEmail">Password dimenticata? Inserisci la tua email</label>
+    <input id="RecoverEmail" type="email" name="email" autocomplete="email" required>
+    <button type="submit" class="btn">Reimposta la password</button>
+  {%- endform -%}
+  {%- if shop.checkout.guest_login -%}
+    {%- form 'guest_login' -%}
+      <button type="submit" class="btn">Continua come ospite</button>
+    {%- endform -%}
+  {%- endif -%}
+</section>

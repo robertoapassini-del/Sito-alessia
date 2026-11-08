@@ -1,0 +1,11 @@
+<section class="page wrap account">
+  <div class="head"><span class="label">Account</span><h1 class="h2">Attiva il tuo account</h1></div>
+  {%- form 'activate_customer_password', class: 'contact-form' -%}
+    {{ form.errors | default_errors }}
+    <label for="ActPassword">Password</label>
+    <input id="ActPassword" type="password" name="customer[password]" autocomplete="new-password" required>
+    <label for="ActConfirm">Conferma la password</label>
+    <input id="ActConfirm" type="password" name="customer[password_confirmation]" autocomplete="new-password" required>
+    <button type="submit" class="btn btn-gold">Attiva</button>
+  {%- endform -%}
+</section>

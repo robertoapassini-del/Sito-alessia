@@ -1,0 +1,103 @@
+<section class="made" id="come-sono-fatti">
+  <div class="wrap">
+    <div class="head">
+      {%- if section.settings.label != blank -%}
+        <span class="label">{{ section.settings.label }}</span>
+      {%- endif -%}
+      <h2>{{ section.settings.heading }}</h2>
+    </div>
+    <ul class="facts">
+      {%- for block in section.blocks -%}
+        <li {{ block.shopify_attributes }}>
+          <b>{{ block.settings.title }}</b>
+          <span>{{ block.settings.text }}</span>
+        </li>
+      {%- endfor -%}
+    </ul>
+    <figure class="boxshot">
+      {%- if section.settings.image != blank -%}
+        {{
+          section.settings.image
+          | image_url: width: 1600
+          | image_tag: widths: '600, 900, 1200, 1600', sizes: '(min-width: 1120px) 1088px, 100vw', loading: 'lazy'
+        }}
+      {%- else -%}
+        <img
+          src="{{ 'scatola.jpg' | asset_url }}"
+          width="1200"
+          height="903"
+          loading="lazy"
+          alt="Due ciondoli nelle loro scatole di cartone con interno in velluto nero."
+        >
+      {%- endif -%}
+      {%- if section.settings.caption != blank -%}
+        <figcaption class="label">{{ section.settings.caption }}</figcaption>
+      {%- endif -%}
+    </figure>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Come sono fatti",
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Etichetta",
+      "default": "Materiali"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Titolo",
+      "default": "Come sono fatti"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Foto",
+      "info": "Se vuota, usa la foto delle scatole."
+    },
+    {
+      "type": "text",
+      "id": "caption",
+      "label": "Didascalia",
+      "default": "Ogni pezzo parte nella sua scatola"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "fact",
+      "name": "Voce",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Titolo",
+          "default": "Il filo"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Testo",
+          "default": "Rame placcato oro 14k oppure argento, intrecciato a mano."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Come sono fatti",
+      "blocks": [
+        { "type": "fact", "settings": { "title": "Il filo", "text": "Rame placcato oro 14k oppure argento, intrecciato a mano." } },
+        { "type": "fact", "settings": { "title": "La pietra", "text": "Sempre naturale: labradorite, adularia, larimar, lapislazzuli, acquamarina e altre." } },
+        { "type": "fact", "settings": { "title": "La catenina", "text": "Acciaio inossidabile, con 5 cm di anellini per regolarla." } },
+        { "type": "fact", "settings": { "title": "La pelle", "text": "Tutto senza nichel." } },
+        { "type": "fact", "settings": { "title": "Gli anelli", "text": "Fatti su misura." } },
+        { "type": "fact", "settings": { "title": "La spedizione", "text": "Entro 3 giorni lavorativi dall’ordine." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

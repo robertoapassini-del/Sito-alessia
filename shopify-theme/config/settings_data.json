@@ -1,0 +1,11 @@
+{
+  "current": "Muschio",
+  "presets": {
+    "Muschio": {
+      "color_earth": "#2b301d",
+      "color_bone": "#f0e8d3",
+      "color_gold": "#e2bb62",
+      "cart_note": true
+    }
+  }
+}

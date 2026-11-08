@@ -1,0 +1,25 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "La Culla della Luna",
+    "theme_version": "1.0.0",
+    "theme_author": "La Culla della Luna",
+    "theme_documentation_url": "https://laculladellaluna.myshopify.com",
+    "theme_support_url": "https://laculladellaluna.myshopify.com/pages/contact"
+  },
+  {
+    "name": "Colori",
+    "settings": [
+      { "type": "color", "id": "color_earth", "label": "Sfondo", "default": "#2b301d" },
+      { "type": "color", "id": "color_bone", "label": "Testo", "default": "#f0e8d3" },
+      { "type": "color", "id": "color_gold", "label": "Accento e pulsanti", "default": "#e2bb62" }
+    ]
+  },
+  {
+    "name": "Negozio",
+    "settings": [
+      { "type": "image_picker", "id": "favicon", "label": "Icona del sito (favicon)" },
+      { "type": "checkbox", "id": "cart_note", "label": "Permetti una nota nel carrello", "info": "Utile per la misura degli anelli.", "default": true }
+    ]
+  }
+]

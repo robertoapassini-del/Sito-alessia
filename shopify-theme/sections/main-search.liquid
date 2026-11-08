@@ -1,0 +1,40 @@
+<section class="shop" data-shop>
+  <div class="wrap">
+    <div class="head"><span class="label">Ricerca</span><h1 class="h2">Cerca una pietra</h1></div>
+    <form action="{{ routes.search_url }}" method="get" role="search" class="search-form">
+      <label class="label" for="SearchInput">Pietra o gioiello</label>
+      <div class="row">
+        <input id="SearchInput" type="search" name="q" value="{{ search.terms | escape }}" placeholder="Per esempio: labradorite">
+        <input type="hidden" name="type" value="product">
+        <button type="submit" class="btn btn-gold">Cerca</button>
+      </div>
+    </form>
+    {%- if search.performed -%}
+      {%- paginate search.results by 48 -%}
+        <p class="label count">{{ search.results_count }} risultati per “{{ search.terms | escape }}”</p>
+        <div class="grid">
+          {%- for item in search.results -%}
+            {%- if item.object_type == 'product' -%}
+              {% render 'product-card', product: item %}
+            {%- endif -%}
+          {%- else -%}
+            <p class="empty">Nessun pezzo trovato. Prova con un’altra pietra.</p>
+          {%- endfor -%}
+        </div>
+        {%- if paginate.pages > 1 -%}
+          <nav class="pagination" aria-label="Pagine">
+            {%- if paginate.previous -%}<a class="btn" href="{{ paginate.previous.url }}">← Precedenti</a>{%- endif -%}
+            {%- if paginate.next -%}<a class="btn" href="{{ paginate.next.url }}">Successivi →</a>{%- endif -%}
+          </nav>
+        {%- endif -%}
+      {%- endpaginate -%}
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Ricerca",
+  "settings": []
+}
+{% endschema %}

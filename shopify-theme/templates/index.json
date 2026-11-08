@@ -1,0 +1,22 @@
+{
+  "sections": {
+    "hero": { "type": "hero", "settings": {} },
+    "collection": { "type": "collection-showcase", "settings": {} },
+    "about": { "type": "about", "settings": {} },
+    "made": {
+      "type": "made",
+      "blocks": {
+        "f1": { "type": "fact", "settings": { "title": "Il filo", "text": "Rame placcato oro 14k oppure argento, intrecciato a mano." } },
+        "f2": { "type": "fact", "settings": { "title": "La pietra", "text": "Sempre naturale: labradorite, adularia, larimar, lapislazzuli, acquamarina e altre." } },
+        "f3": { "type": "fact", "settings": { "title": "La catenina", "text": "Acciaio inossidabile, con 5 cm di anellini per regolarla." } },
+        "f4": { "type": "fact", "settings": { "title": "La pelle", "text": "Tutto senza nichel." } },
+        "f5": { "type": "fact", "settings": { "title": "Gli anelli", "text": "Fatti su misura." } },
+        "f6": { "type": "fact", "settings": { "title": "La spedizione", "text": "Entro 3 giorni lavorativi dall’ordine." } }
+      },
+      "block_order": ["f1", "f2", "f3", "f4", "f5", "f6"],
+      "settings": {}
+    },
+    "contact": { "type": "contact", "settings": {} }
+  },
+  "order": ["hero", "collection", "about", "made", "contact"]
+}

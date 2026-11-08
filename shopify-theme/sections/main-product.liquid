@@ -1,0 +1,113 @@
+{%- liquid
+  capture stone
+    render 'stone-name', product: product
+  endcapture
+  assign stone = stone | strip
+  assign desc = product.description | strip_html | strip_newlines | replace: 'Aduaria', 'Adularia' | replace: 'nicel.', 'nichel.'
+  assign parts = desc | split: '. '
+  assign metal = ''
+  if desc contains 'placcati oro' or desc contains 'placcato oro'
+    assign metal = 'Oro 14k'
+  elsif desc contains 'argento'
+    assign metal = 'Argento'
+  endif
+  assign current_variant = product.selected_or_first_available_variant
+-%}
+<section class="product wrap">
+  <div class="product-media">
+    <div class="pics" data-gallery>
+      {%- for media in product.media -%}
+        {%- if media.media_type == 'image' -%}
+          {%- liquid
+            assign loading = 'lazy'
+            if forloop.first
+              assign loading = 'eager'
+            endif
+          -%}
+          {{
+            media
+            | image_url: width: 1200
+            | image_tag:
+              widths: '540, 720, 900, 1200',
+              sizes: '(min-width: 900px) 50vw, 100vw',
+              loading: loading,
+              alt: media.alt
+          }}
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+    {%- if product.media.size > 1 -%}
+      <p class="label swipe">Scorri le foto →</p>
+    {%- endif -%}
+  </div>
+
+  <div class="product-info">
+    <span class="label">{{ product.title }}{% if metal != blank %} · {{ metal }}{% endif %}</span>
+    <h1 class="product-title">{{ stone | default: product.title }}</h1>
+    <p class="price">
+      {{ current_variant.price | money }}
+      {%- unless product.available %} · venduto{% endunless -%}
+    </p>
+
+    <ul class="details">
+      {%- for part in parts -%}
+        {%- assign clean = part | remove: '.' | strip -%}
+        {%- if clean != blank -%}
+          <li>{{ clean }}</li>
+        {%- endif -%}
+      {%- endfor -%}
+    </ul>
+
+    {%- form 'product', product, class: 'product-form', data-product-form: '' -%}
+      {%- if product.has_only_default_variant -%}
+        <input type="hidden" name="id" value="{{ current_variant.id }}">
+      {%- else -%}
+        <label class="label" for="Variant-{{ section.id }}">Variante</label>
+        <select id="Variant-{{ section.id }}" name="id" class="select">
+          {%- for variant in product.variants -%}
+            <option value="{{ variant.id }}"
+              {%- if variant == current_variant %} selected{% endif -%}
+              {%- unless variant.available %} disabled{% endunless -%}
+            >
+              {{ variant.title }} – {{ variant.price | money }}{% unless variant.available %} (esaurito){% endunless %}
+            </option>
+          {%- endfor -%}
+        </select>
+      {%- endif -%}
+      <div class="actions">
+        {%- if product.available -%}
+          <button type="submit" name="add" class="btn btn-gold">Aggiungi al carrello</button>
+          {{ form | payment_button }}
+        {%- else -%}
+          <button type="button" class="btn" disabled>Venduto</button>
+          <a class="btn btn-gold" href="{{ routes.root_url }}#contatti">Chiedi un pezzo simile</a>
+        {%- endif -%}
+      </div>
+    {%- endform -%}
+  </div>
+</section>
+
+{%- liquid
+  assign related = collections.all.products
+-%}
+<section class="shop related">
+  <div class="wrap">
+    <div class="head"><span class="label">Altre pietre</span><h2>Potrebbe piacerti</h2></div>
+    <div class="grid">
+      {%- assign shown = 0 -%}
+      {%- for p in related -%}
+        {%- if p.id != product.id and p.available and shown < 4 -%}
+          {% render 'product-card', product: p %}
+          {%- assign shown = shown | plus: 1 -%}
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Prodotto",
+  "settings": []
+}
+{% endschema %}

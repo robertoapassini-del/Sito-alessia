@@ -1,0 +1,54 @@
+<section class="cart wrap">
+  <div class="head"><span class="label">Il tuo ordine</span><h1 class="h2">Carrello</h1></div>
+
+  {%- if cart.item_count > 0 -%}
+    <form action="{{ routes.cart_url }}" method="post" class="cart-form" novalidate>
+      <ul class="cart-items">
+        {%- for item in cart.items -%}
+          {%- capture stone -%}{%- render 'stone-name', product: item.product -%}{%- endcapture -%}
+          <li class="cart-item">
+            <a href="{{ item.url }}" class="cart-thumb">
+              {%- if item.image -%}
+                {{ item.image | image_url: width: 240 | image_tag: widths: '120, 240', sizes: '96px', loading: 'lazy', alt: item.product.title }}
+              {%- endif -%}
+            </a>
+            <div class="cart-text">
+              <b>{{ stone | strip | default: item.product.title }}</b>
+              <span class="label">{{ item.product.title }}{% unless item.product.has_only_default_variant %} · {{ item.variant.title }}{% endunless %}</span>
+              <div class="cart-qty">
+                <label class="label" for="Qty-{{ item.index }}">Quantità</label>
+                <input id="Qty-{{ item.index }}" type="number" name="updates[]" value="{{ item.quantity }}" min="0">
+                <a class="label remove" href="{{ item.url_to_remove }}">Rimuovi</a>
+              </div>
+            </div>
+            <span class="price">{{ item.final_line_price | money }}</span>
+          </li>
+        {%- endfor -%}
+      </ul>
+
+      <div class="cart-total">
+        <span class="label">Totale</span>
+        <span class="price big">{{ cart.total_price | money_with_currency }}</span>
+      </div>
+      <p class="label">Spedizione calcolata al pagamento. Spediamo entro 3 giorni lavorativi.</p>
+      {%- if settings.cart_note -%}
+        <label class="label" for="CartNote">Note per Alessia (per esempio la misura dell’anello)</label>
+        <textarea id="CartNote" name="note" rows="3">{{ cart.note }}</textarea>
+      {%- endif -%}
+      <div class="actions">
+        <button type="submit" name="checkout" class="btn btn-gold">Procedi al pagamento</button>
+        <button type="submit" name="update" class="btn">Aggiorna il carrello</button>
+      </div>
+    </form>
+  {%- else -%}
+    <p class="empty">Il carrello è vuoto.</p>
+    <a class="btn btn-gold" href="{{ routes.root_url }}#collezione">Scegli la tua pietra</a>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "Carrello",
+  "settings": []
+}
+{% endschema %}
